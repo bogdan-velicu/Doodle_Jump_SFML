@@ -1,8 +1,8 @@
-#include "Screen.h"
+#include "GameScreen.h"
 #include <iostream>
 #include <ostream>
 
-Screen::Screen() {
+GameScreen::GameScreen() {
     std::cout << "Screen constructor called\n";
 }
 

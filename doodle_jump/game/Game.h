@@ -1,6 +1,6 @@
 #include "./../platform/Platform.h"
 #include "./../player/Player.h"
-#include "./../screen/Screen.h"
+#include "./../screen/GameScreen.h"
 #include "./../coordinates/Coordinates.h"
 
 #include <vector>

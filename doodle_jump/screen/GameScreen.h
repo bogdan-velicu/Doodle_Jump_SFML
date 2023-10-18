@@ -24,9 +24,9 @@ inline std::ostream& operator<<(std::ostream& out, const ScreenType& screenType)
     return out;
 }
 
-class Screen {
+class GameScreen {
 public:
-    Screen();
+    GameScreen();
     friend std::ostream& operator<<(std::ostream& out, const ScreenType& screenType);
     void render();
 };
