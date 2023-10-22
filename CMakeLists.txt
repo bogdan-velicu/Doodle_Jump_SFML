@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing executable name in this file
 # for now, the project name is used as the executable name
-project(oop)
+project(doodle_jump)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -108,7 +108,7 @@ endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp doodle_jump/coordinates/Coordinates.cpp doodle_jump/game/Game.cpp doodle_jump/platform/Platform.cpp doodle_jump/player/Player.cpp doodle_jump/screen/GameScreen.cpp)
+add_executable(${PROJECT_NAME} main.cpp doodle_jump/coordinates/Coordinates.cpp doodle_jump/game/Game.cpp doodle_jump/platform/Platform.cpp doodle_jump/player/Player.cpp doodle_jump/screen/GameScreen.cpp doodle_jump/screen/MainMenu.cpp doodle_jump/screen/PlayScreen.cpp)
 
 ###############################################################################
 

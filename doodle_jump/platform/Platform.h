@@ -1,5 +1,5 @@
-#include "./../coordinates/Coordinates.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 enum class PlatformType {
     NORMAL,
@@ -27,17 +27,14 @@ inline std::ostream& operator<<(std::ostream& os, const PlatformType& platformTy
 
 class Platform {
 private:
-    Coordinates coordinates;
     PlatformType type;
+    sf::Sprite sprite;
 public:
     Platform();
-    explicit Platform(const Coordinates& coordinates_);
-    explicit Platform(const Coordinates& coordinates_, PlatformType type_);
+    explicit Platform(PlatformType type_);
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
     Platform& operator=(const Platform& platform_);
     ~Platform();
-    Coordinates getCoordinates() const;
     PlatformType getType() const;
-    void update();
-    void draw();
+    sf::Sprite getSprite() const;
 };

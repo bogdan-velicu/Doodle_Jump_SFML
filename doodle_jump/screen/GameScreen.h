@@ -1,9 +1,12 @@
+#pragma once
+
 #include <iostream>
 
 enum class ScreenType {
     MAIN_MENU,
-    GAME,
-    GAME_OVER
+    PLAY,
+    GAME_OVER,
+    CLOSE
 };
 
 inline std::ostream& operator<<(std::ostream& out, const ScreenType& screenType) {
@@ -11,8 +14,8 @@ inline std::ostream& operator<<(std::ostream& out, const ScreenType& screenType)
     case ScreenType::MAIN_MENU:
         out << "MAIN_MENU";
         break;
-    case ScreenType::GAME:
-        out << "GAME";
+    case ScreenType::PLAY:
+        out << "PLAY";
         break;
     case ScreenType::GAME_OVER:
         out << "GAME_OVER";
@@ -25,8 +28,14 @@ inline std::ostream& operator<<(std::ostream& out, const ScreenType& screenType)
 }
 
 class GameScreen {
+private:
+    ScreenType screenType;
 public:
     GameScreen();
+    ~GameScreen();
+    explicit GameScreen(ScreenType screenType);
     friend std::ostream& operator<<(std::ostream& out, const ScreenType& screenType);
+    ScreenType getScreenType() const;
+    void setScreenType(ScreenType screenType);
     void render();
 };

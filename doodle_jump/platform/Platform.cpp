@@ -1,26 +1,30 @@
 #include "Platform.h"
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <time.h>
 
 Platform::Platform() {
     std::cout << "Platform constructor called\n";
-    coordinates = Coordinates(0, 0);
     type = PlatformType::NORMAL;
+
+    sf::Texture texture;
+    texture.loadFromFile("assets/platform.png");
+    sprite.setTexture(texture);
+
+    int x = rand() % 700;
+    int y = rand() % 500;
+    sprite.setPosition((float)x, (float)y);
 }
 
-Platform::Platform(const Coordinates& coordinates_) {
+Platform::Platform(PlatformType type_) {
     std::cout << "Platform constructor called\n";
-    coordinates = coordinates_;
-    type = PlatformType::NORMAL;
-}
-
-Platform::Platform(const Coordinates& coordinates_, PlatformType type_) {
-    std::cout << "Platform constructor called\n";
-    coordinates = coordinates_;
     type = type_;
 }
 
 std::ostream& operator<<(std::ostream& os, const Platform& platform) {
-    os << "Platform: coordinates = " << platform.coordinates << ", type = " << platform.type;
+    sf::Vector2f coordinates = platform.getSprite().getPosition();
+    os << "Platform: coordinates = (" << std::to_string(coordinates.x) << ", " << std::to_string(coordinates.y) << "), type = " << platform.type;
     return os;
 }
 
@@ -30,10 +34,10 @@ Platform::~Platform() {
     std::cout << "Platform destructor called\n";
 }
 
-Coordinates Platform::getCoordinates() const {
-    return coordinates;
-}
-
 PlatformType Platform::getType() const {
     return type;
+}
+
+sf::Sprite Platform::getSprite() const {
+    return sprite;
 }

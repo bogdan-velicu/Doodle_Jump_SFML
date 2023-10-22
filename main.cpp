@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <time.h>
 
 #include "./doodle_jump/game/Game.h"
 
@@ -13,35 +14,12 @@ int main() {
     XInitThreads();
     #endif
 
+    srand(time(NULL));
+
     Game game = Game();
-    game.run();
     std::cout << game << '\n';
 
-    // sf::RenderWindow window;
-    // window.create(sf::VideoMode(800, 700), "Doodle Jump", sf::Style::Default);
-
-    // while(window.isOpen()) {
-    //     sf::Event e;
-    //     while(window.pollEvent(e)) {
-    //         switch(e.type) {
-    //         case sf::Event::Closed:
-    //             window.close();
-    //             break;
-    //         case sf::Event::Resized:
-    //             std::cout << "New width: " << window.getSize().x << '\n'
-    //                       << "New height: " << window.getSize().y << '\n';
-    //             break;
-    //         case sf::Event::KeyPressed:
-    //             std::cout << "Received key " << (e.key.code == sf::Keyboard::X ? "X" : "(other)") << "\n";
-    //             break;
-    //         default:
-    //             break;
-    //         }
-    //     }
-
-    //     window.clear();
-    //     window.display();
-    // }
+    game.run();
 
     return 0;
 }

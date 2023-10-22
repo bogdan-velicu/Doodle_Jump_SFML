@@ -4,15 +4,15 @@
 
 class Coordinates {
 private:
-    int x;
-    int y;
+    float x;
+    float y;
 public:
     Coordinates();
-    Coordinates(int x_, int y_);
+    Coordinates(float x_, float y_);
     Coordinates(const Coordinates& coordinates_);
     Coordinates& operator=(const Coordinates& coordinates_);
     friend std::ostream& operator<<(std::ostream& os, const Coordinates& coordinates);
-    void set(int x_, int y_);
-    int getX() const;
-    int getY() const;
+    void set(float x_, float y_);
+    float getX() const;
+    float getY() const;
 };

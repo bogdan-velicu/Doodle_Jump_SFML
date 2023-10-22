@@ -5,7 +5,7 @@ Coordinates::Coordinates() {
     y = 0;
 }
 
-Coordinates::Coordinates(int x_, int y_) {
+Coordinates::Coordinates(float x_, float y_) {
     x = x_;
     y = y_;
 }
@@ -22,15 +22,15 @@ std::ostream& operator<<(std::ostream& os, const Coordinates& coordinates) {
     return os;
 }
 
-void Coordinates::set(int x_, int y_) {
+void Coordinates::set(float x_, float y_) {
     x = x_;
     y = y_;
 }
 
-int Coordinates::getX() const {
+float Coordinates::getX() const {
     return x;
 }
 
-int Coordinates::getY() const {
+float Coordinates::getY() const {
     return y;
 }
