@@ -3,6 +3,7 @@
 
 Player::Player() {
     std::cout << "Player constructor called\n";
+    currentHeight = 0;
 
     xVelocity = 0;
     yVelocity = 0;
@@ -10,9 +11,9 @@ Player::Player() {
     texture = sf::Texture();
     texture.loadFromFile("assets/player.png");
 
-    sprite = sf::Sprite();
-    sprite.setTexture(texture);
-    sprite.setPosition(100, 100);
+    sprite = new sf::Sprite();
+    sprite->setTexture(texture);
+    sprite->setPosition(400, 550);
 }
 
 Player::~Player() {
@@ -20,25 +21,49 @@ Player::~Player() {
 }
 
 sf::Sprite Player::getSprite() const {
-    return sprite;
+    return *sprite;
 }
 
 sf::Texture Player::getTexture() const {
     return texture;
 }
 
+void Player::moveSprite(const sf::Vector2f& coordinates_) {
+    sprite->move(coordinates_);
+}
+
+void Player::setXVelocity(float xVelocity_) {
+    xVelocity = xVelocity_;
+}
+
+void Player::setYVelocity(float yVelocity_) {
+    yVelocity = yVelocity_;
+}
+
+float Player::getXVelocity() const {
+    return xVelocity;
+}
+
+float Player::getYVelocity() const {
+    return yVelocity;
+}
+
+sf::Vector2f Player::getVelocity() const {
+    return {xVelocity, yVelocity};
+}
+
 void Player::jump() {
-    yVelocity = -5.0f;
+    yVelocity = -12.0f;
 }
 
 void Player::moveLeft() {
-    if (xVelocity > -2.0f)
-        xVelocity -= 0.5f;
+    if (xVelocity > -5.0f)
+        xVelocity -= 1.0f;
 }
 
 void Player::moveRight() {
-    if (xVelocity < 2.0f)
-        xVelocity += 0.5f;
+    if (xVelocity < 5.0f)
+        xVelocity += 1.0f;
 }
 
 void Player::handleMovement() {
@@ -46,38 +71,38 @@ void Player::handleMovement() {
         sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         moveLeft();
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         moveRight();
     }
+    else {
+        // Handle horizontal movement
+        if (xVelocity > 0.0f) {
+            xVelocity -= 0.5f;
+        }
+        else if (xVelocity < 0.0f) {
+            xVelocity += 0.5f;
+        }
+        else if (xVelocity == 0.3f || xVelocity == -0.3f) {
+            xVelocity = 0.0f;
+        }
+    }
 
-    // Handle horizontal movement
-    if (xVelocity > 0.0f) {
-        xVelocity -= 0.1f;
+    // Handle moving off screen
+    if (sprite->getPosition().x < 0.0f) {
+        sprite->setPosition(800.0f, sprite->getPosition().y);
     }
-    else if (xVelocity < 0.0f) {
-        xVelocity += 0.1f;
-    }
-    else if (xVelocity == 0.1f || xVelocity == -0.1f) {
-        xVelocity = 0.0f;
+    else if (sprite->getPosition().x > 800.0f) {
+        sprite->setPosition(0.0f, sprite->getPosition().y);
     }
 
     // Handle gravity
-    if (yVelocity < 5.0f) // Max falling speed
-        yVelocity += 0.2f;
-
-    // Handle ground collision
-    if (sprite.getPosition().y > 500.0f)
-        jump();
+    if (yVelocity < 4.0f) // Max falling speed
+        yVelocity += 0.4f;
 }
 
 void Player::update() {
     handleMovement();
-
-    sf::Vector2f coordinates = sprite.getPosition();
-    coordinates.x += xVelocity;
-    coordinates.y += yVelocity;
-    sprite.setPosition(coordinates);
 }
 
 std::ostream& operator<<(std::ostream& out, const Player& player) {
@@ -88,9 +113,9 @@ std::ostream& operator<<(std::ostream& out, const Player& player) {
 }
 
 sf::Vector2f Player::getCoordinates() const {
-    return sprite.getPosition();
+    return sprite->getPosition();
 }
 
 void Player::setCoordinates(const sf::Vector2f& coordinates_) {
-    sprite.setPosition(coordinates_);
+    sprite->setPosition(coordinates_);
 }

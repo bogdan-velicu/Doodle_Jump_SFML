@@ -7,34 +7,23 @@ enum class PlatformType {
     MOVING,
     BOOST,
 };
-inline std::ostream& operator<<(std::ostream& os, const PlatformType& platformType) {
-    switch (platformType) {
-        case PlatformType::NORMAL:
-            os << "NORMAL";
-            break;
-        case PlatformType::BREAKABLE:
-            os << "BREAKABLE";
-            break;
-        case PlatformType::MOVING:
-            os << "MOVING";
-            break;
-        case PlatformType::BOOST:
-            os << "BOOST";
-            break;
-    }
-    return os;
-}
+std::ostream& operator<<(std::ostream& os, const PlatformType& platformType);
 
 class Platform {
 private:
     PlatformType type;
-    sf::Sprite sprite;
+    sf::Texture texture;
+    sf::Sprite* sprite;
 public:
     Platform();
+    explicit Platform(bool upperScreen);
     explicit Platform(PlatformType type_);
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
     Platform& operator=(const Platform& platform_);
+    Platform(const Platform& platform_) = default;
     ~Platform();
     PlatformType getType() const;
     sf::Sprite getSprite() const;
+    sf::Texture getTexture() const;
+    void moveSprite(const sf::Vector2f& coordinates_);
 };

@@ -1,8 +1,8 @@
 #include "./../platform/Platform.h"
 #include "./../player/Player.h"
-#include "./../coordinates/Coordinates.h"
 #include "./../screen/GameScreen.h"
 
+#include <queue>
 #include <vector>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -13,9 +13,10 @@ class Game {
     std::string windowTitle;
     sf::Font font;
     int score;
-    sf::Text scoreText;
-    Player* player;
-    std::vector<Platform> platforms;
+    int maxScore;
+    sf::Text *scoreText;
+    Player *player;
+    std::vector<Platform*> platforms;
 public:
     Game();
     ~Game();
@@ -25,5 +26,8 @@ public:
     void setScore(int score);
     void changeScreen(ScreenType screenType);
     void play();
+    void reset();
+    void displayDebugInfo();
     void displayScore();
+    void checkCollision();
 };
