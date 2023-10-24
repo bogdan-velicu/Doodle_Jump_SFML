@@ -11,7 +11,7 @@ MainMenu::~MainMenu() {
 
 void MainMenu::render(sf::RenderWindow& window) {
     sf::Font font;
-    font.loadFromFile("fonts/Valoon.ttf");
+    font.loadFromFile("bin/fonts/Valoon.ttf");
 
     sf::Text text;
     text.setFont(font);

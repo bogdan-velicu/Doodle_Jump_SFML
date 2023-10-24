@@ -11,7 +11,7 @@ GameOver::~GameOver() {
 void GameOver::render(sf::RenderWindow& window) {
     std::cout << "GameOver render called\n";
     sf::Font font;
-    font.loadFromFile("fonts/Valoon.ttf");
+    font.loadFromFile("bin/fonts/Valoon.ttf");
 
     sf::Text text;
     text.setFont(font);

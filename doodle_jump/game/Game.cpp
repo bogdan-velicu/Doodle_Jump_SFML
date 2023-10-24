@@ -3,8 +3,10 @@
 #include "./../screen/PlayScreen.h"
 #include "./../screen/GameOver.h"
 #include <iostream>
+#include <new>
 #include <string>
 #include <sys/errno.h>
+#include "./../platform/PlatformGenerator.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -17,18 +19,13 @@ Game::Game() {
     maxScore = 0;
     player = new Player();
     platforms = std::vector<Platform*>();
-    for (int i = 0; i < 3; i++) {
+    
+    for (int i = 0; i < 15; i++) {
         platforms.push_back(new Platform());
-    }
-    for (int i = 0; i < 2; i++) {
-        platforms.push_back(new Platform(false));
-    }
-    for (int i = 0; i < 2; i++) {
-        platforms.push_back(new Platform(true));
     }
 
     font = sf::Font();
-    font.loadFromFile("fonts/Valoon.ttf");
+    font.loadFromFile("bin/fonts/Valoon.ttf");
 
     scoreText = new sf::Text();
     scoreText->setFont(font);
@@ -63,15 +60,12 @@ void Game::reset() {
         delete platform;
     }
     platforms.clear();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 15; i++) {
         platforms.push_back(new Platform());
     }
-    for (int i = 0; i < 2; i++) {
-        platforms.push_back(new Platform(false));
-    }
-    for (int i = 0; i < 2; i++) {
-        platforms.push_back(new Platform(true));
-    }
+    // PlatformGenerator::setLastPlatformCoordinates({ 0.0f, 600.0f });
+    PlatformGenerator::setLastPlatform(nullptr);
+    PlatformGenerator::setLastPlatformType(PlatformType::NORMAL);
     score = 0;
     maxScore = 0;
 }
@@ -98,6 +92,8 @@ void Game::run() {
                     break;
                 case ScreenType::GAME_OVER:
                     GameOver::handleInput(e, currentScreen);
+                    if (currentScreen == ScreenType::PLAY)
+                        reset();
                     break;
                 case ScreenType::PLAY:
                     PlayScreen::handleInput(e, currentScreen);
@@ -140,7 +136,7 @@ void Game::checkCollision() {
 
     // Handle ground collision
     if (lowerPlayerBounds.getPosition().y > 600.0f) {
-        if (score > 200) {
+        if (score > 150) {
             reset();
             changeScreen(ScreenType::GAME_OVER);
         }
@@ -158,16 +154,23 @@ void Game::checkCollision() {
         if (lowerPlayerBounds.intersects(upperPlatformBounds)) {
             if (player->getSprite().getPosition().y < platform->getSprite().getPosition().y) {
                 // Jump only if player is falling
-                if (player->getYVelocity() > 0.0f)
+                if (player->getYVelocity() > 0.2f) {
                     player->jump();
-                if (platform->getType() == PlatformType::BREAKABLE) {
-                    delete platform;
-                    // platform = new Platform();
-                }
-                else if (platform->getType() == PlatformType::BOOST) {
-                    player->setYVelocity(-10.0f);
+
+                    if (platform->getType() == PlatformType::BREAKABLE) {
+                        delete platform;
+                        platform = new Platform();
+                    }
+                    else if (platform->getType() == PlatformType::BOOST) {
+                        player->setYVelocity(-20.0f);
+                    }
                 }
             }
+        }
+
+        // Handle moving platforms
+        if (platform->getType() == PlatformType::MOVING) {
+            platform->animateMovement();
         }
     }
 }
@@ -197,9 +200,9 @@ void Game::play() {
 
     if (player->getSprite().getPosition().y < 300 && maxScore - score < 200) {
         for (auto& platform : platforms) {
-            if (platform->getSprite().getPosition().y > 600.0f) {
+            if (platform->getSprite().getPosition().y > 660.0f) {
                 delete platform;
-                platform = new Platform(true);
+                platform = new Platform();
             }
 
             float yVelocity = player->getYVelocity();

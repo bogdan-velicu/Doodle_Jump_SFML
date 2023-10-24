@@ -4,35 +4,67 @@
 #include <ostream>
 #include <string>
 #include <time.h>
+#include "PlatformGenerator.h"
 
 Platform::Platform() {
     std::cout << "Platform constructor called\n";
-    type = PlatformType::NORMAL;
+    
+    PlatformType platformType = PlatformType::NORMAL;
+    updateCount = 0;
+    int random = rand() % 100;
 
-    sprite = new sf::Sprite();
-    texture.loadFromFile("assets/platform.png");
-    sprite->setTexture(texture);
+    // 10% chance of generating a breakable platform
+    // 10% chance of generating a moving platform
+    // 10% chance of generating a boost platform
+    // 70% chance of generating a normal platform
 
-    int x = rand() % 700;
-    int y = rand() % 300 + 300;
-    sprite->setPosition((float)x, (float)y);
-}
-
-Platform::Platform(bool upperScreen) {
-    std::cout << "Platform constructor called\n";
-    type = PlatformType::NORMAL;
-
-    sprite = new sf::Sprite();
-    texture.loadFromFile("assets/platform.png");
-    sprite->setTexture(texture);
-
-    int x = rand() % 700;
-    int y = 0;
-    if (upperScreen) {
-        y = rand() % 50 + 50;
-    } else {
-        y = rand() % 50 + 300;
+    if (random < 10) {
+        platformType = PlatformType::BREAKABLE;
+    } else if (random < 20) {
+        platformType = PlatformType::MOVING;
+    } else if (random < 30) {
+        platformType = PlatformType::BOOST;
     }
+
+    // sf::Vector2f lastPlatformCoordinates = PlatformGenerator::getLastPlatformCoordinates();
+    Platform* lastPlatform = PlatformGenerator::getLastPlatform();
+    sf::Vector2f lastPlatformCoordinates = { 0.0f, 600.0f };
+    if (lastPlatform != nullptr) 
+        lastPlatformCoordinates = lastPlatform->getSprite().getPosition();
+
+    int x = rand() % 700;
+    while (abs((float)x - lastPlatformCoordinates.x) < 50.0f) {
+        x = rand() % 700;
+    }
+
+    // int y = (int)lastPlatformCoordinates.y - (rand() % maxHeightRandom + minHeightDifference);
+    int y = (int)lastPlatformCoordinates.y - 75;
+
+    // PlatformGenerator::setLastPlatformCoordinates({ (float)x, (float)y });
+    PlatformGenerator::setLastPlatform(this);
+    PlatformGenerator::setLastPlatformType(platformType);
+
+    type = platformType;
+
+    sprite = new sf::Sprite();
+    switch (platformType) {
+    case PlatformType::NORMAL:
+        texture.loadFromFile("bin/assets/platform.png");
+        break;
+    case PlatformType::BREAKABLE:
+        texture.loadFromFile("bin/assets/platform_break.png");
+        break;
+    case PlatformType::MOVING:
+        texture.loadFromFile("bin/assets/platform_moving.png");
+        break;
+    case PlatformType::BOOST:
+        texture.loadFromFile("bin/assets/platform_boost.png");
+        break;
+    default:
+        break;
+    }
+    sprite->setTexture(texture);
+
     sprite->setPosition((float)x, (float)y);
 }
 
@@ -57,19 +89,6 @@ std::ostream& operator<<(std::ostream& os, const PlatformType& platformType) {
     return os;
 }
 
-Platform::Platform(PlatformType type_) {
-    std::cout << "Platform constructor called\n";
-    type = type_;
-
-    sprite = new sf::Sprite();
-    texture.loadFromFile("assets/platform.png");
-    sprite->setTexture(texture);
-
-    int x = rand() % 700;
-    int y = rand() % 600;
-    sprite->setPosition((float)x, (float)y);
-}
-
 std::ostream& operator<<(std::ostream& os, const Platform& platform) {
     sf::Vector2f coordinates = platform.getSprite().getPosition();
     os << "Platform: coordinates = (" << std::to_string(coordinates.x) << ", " << std::to_string(coordinates.y) << "), type = " << platform.type;
@@ -87,11 +106,26 @@ void Platform::moveSprite(const sf::Vector2f& coordinates_) {
     sprite->move(coordinates_);
 }
 
+void Platform::animateMovement() {
+    if (updateCount < 100) {
+        sprite->move({ -1.0f, 0.0f });
+    }
+    else if (updateCount < 200) {
+        sprite->move({ 1.0f, 0.0f });
+    }
+    else {
+        updateCount = 0;
+    }
+    updateCount++;
+}
+
 PlatformType Platform::getType() const {
     return type;
 }
 
 sf::Sprite Platform::getSprite() const {
+    if (sprite == nullptr)
+        return {};
     return *sprite;
 }
 

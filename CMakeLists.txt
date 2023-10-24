@@ -108,7 +108,7 @@ endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp doodle_jump/game/Game.cpp doodle_jump/platform/Platform.cpp doodle_jump/player/Player.cpp doodle_jump/screen/GameScreen.cpp doodle_jump/screen/MainMenu.cpp doodle_jump/screen/PlayScreen.cpp doodle_jump/screen/GameOver.cpp)
+add_executable(${PROJECT_NAME} main.cpp doodle_jump/game/Game.cpp doodle_jump/platform/Platform.cpp doodle_jump/platform/PlatformGenerator.cpp doodle_jump/player/Player.cpp doodle_jump/screen/GameScreen.cpp doodle_jump/screen/MainMenu.cpp doodle_jump/screen/PlayScreen.cpp doodle_jump/screen/GameOver.cpp)
 
 ###############################################################################
 
@@ -158,7 +158,6 @@ endif()
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # update name in .github/workflows/cmake.yml:29 when changing "bin" name here
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-install(DIRECTORY assets DESTINATION bin)
-install(DIRECTORY fonts DESTINATION bin)
+install(DIRECTORY assets fonts DESTINATION bin)
 # install(DIRECTORY some_dir1 some_dir2 DESTINATION bin)
 # install(FILES some_file1.txt some_file2.md DESTINATION bin)

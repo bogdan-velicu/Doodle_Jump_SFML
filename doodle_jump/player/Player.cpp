@@ -9,7 +9,7 @@ Player::Player() {
     yVelocity = 0;
 
     texture = sf::Texture();
-    texture.loadFromFile("assets/player.png");
+    texture.loadFromFile("bin/assets/player.png");
 
     sprite = new sf::Sprite();
     sprite->setTexture(texture);
