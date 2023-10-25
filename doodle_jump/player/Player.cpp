@@ -66,9 +66,9 @@ void Player::setYVelocity(float yVelocity_) {
     yVelocity = yVelocity_;
 }
 
-float Player::getXVelocity() const {
-    return xVelocity;
-}
+// float Player::getXVelocity() const {
+//     return xVelocity;
+// }
 
 float Player::getYVelocity() const {
     return yVelocity;

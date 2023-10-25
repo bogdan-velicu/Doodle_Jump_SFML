@@ -29,7 +29,7 @@ public:
     // void setXVelocity(float xVelocity_);
     void setYVelocity(float yVelocity_);
 
-    float getXVelocity() const;
+    // float getXVelocity() const;
     float getYVelocity() const;
     sf::Vector2f getVelocity() const;
 
