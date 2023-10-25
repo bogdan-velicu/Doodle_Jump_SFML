@@ -15,14 +15,12 @@ class Platform {
 private:
     PlatformType type;
     sf::Texture texture = sf::Texture();
-    sf::Sprite* sprite;
+    sf::Sprite sprite = sf::Sprite();
     int updateCount;
 public:
     Platform();
+    void useGenerator(const sf::Vector2f& lastPlatformCoordinates);
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
-    Platform& operator=(const Platform& platform_);
-    Platform(const Platform& platform_);
-    ~Platform();
     PlatformType getType() const;
     sf::Sprite getSprite() const;
     // sf::Texture getTexture() const;

@@ -12,13 +12,17 @@ const int SCREEN_HEIGHT = 600;
 Game::Game() {
     std::cout << "Game constructor called\n";
     currentScreen = ScreenType::MAIN_MENU;
+    platformGenerator = PlatformGenerator();
     score = 0;
     maxScore = 0;
     player = new Player();
     platforms = std::vector<Platform*>();
     
     for (int i = 0; i < 15; i++) {
-        platforms.push_back(new Platform());
+        auto platform = new Platform();
+        platform->useGenerator(platformGenerator.getLastPlatformCoordinates());
+        platformGenerator.setLastPlatform(platform);
+        platforms.push_back(platform);
     }
 
     font = sf::Font();
@@ -43,41 +47,6 @@ Game::~Game() {
     }
 }
 
-Game& Game::operator=(const Game& game_) {
-    std::cout << "Game assignment operator called\n";
-    if (this != &game_) {
-        currentScreen = game_.currentScreen;
-        score = game_.score;
-        maxScore = game_.maxScore;
-        player = new Player(*game_.player);
-        platforms = std::vector<Platform*>();
-        for (auto& platform : game_.platforms) {
-            platforms.push_back(new Platform(*platform));
-        }
-        font = game_.font;
-        scoreText = new sf::Text(*game_.scoreText);
-        window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
-        window.setFramerateLimit(120);
-    }
-    return *this;
-}
-
-Game::Game(const Game& game_) {
-    std::cout << "Game copy constructor called\n";
-    currentScreen = game_.currentScreen;
-    score = game_.score;
-    maxScore = game_.maxScore;
-    player = new Player(*game_.player);
-    platforms = std::vector<Platform*>();
-    for (auto& platform : game_.platforms) {
-        platforms.push_back(new Platform(*platform));
-    }
-    font = game_.font;
-    scoreText = new sf::Text(*game_.scoreText);
-    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
-    window.setFramerateLimit(120);
-}
-
 std::ostream& operator<<(std::ostream& out, const Game& game) {
     out << "Game object\n"
         << "Current screen: " << game.currentScreen << '\n'
@@ -93,11 +62,13 @@ void Game::reset() {
     }
     platforms.clear();
 
-    PlatformGenerator::setLastPlatform(nullptr);
-    PlatformGenerator::setLastPlatformType(PlatformType::NORMAL);
+    platformGenerator.setLastPlatform(new Platform());
 
     for (int i = 0; i < 15; i++) {
-        platforms.push_back(new Platform());
+        auto platform = new Platform();
+        platform->useGenerator(platformGenerator.getLastPlatformCoordinates());
+        platformGenerator.setLastPlatform(platform);
+        platforms.push_back(platform);
     }
     score = 0;
     maxScore = 0;
@@ -191,7 +162,10 @@ void Game::checkCollision() {
 
                     if (platform->getType() == PlatformType::BREAKABLE) {
                         delete platform;
-                        platform = new Platform();
+                        auto plat = new Platform();
+                        plat->useGenerator(platformGenerator.getLastPlatformCoordinates());
+                        platformGenerator.setLastPlatform(plat);
+                        platform = plat;
                     }
                     else if (platform->getType() == PlatformType::BOOST) {
                         player->setYVelocity(-20.0f);
@@ -226,9 +200,12 @@ void Game::play() {
 
     if (player->getSprite().getPosition().y < 300 && maxScore - score < 200) {
         for (auto& platform : platforms) {
-            if (platform->getSprite().getPosition().y > 660.0f) {
+            if (platform->getSprite().getPosition().y > 750.0f) {
                 delete platform;
-                platform = new Platform();
+                auto plat = new Platform();
+                plat->useGenerator(platformGenerator.getLastPlatformCoordinates());
+                platformGenerator.setLastPlatform(plat);
+                platform = plat;
             }
 
             float yVelocity = player->getYVelocity();
@@ -253,11 +230,11 @@ void Game::play() {
 }
 
 void Game::displayScore() {
-    score -= (int)player->getYVelocity();
+    score -= player->getYVelocity();
     if (score > maxScore)
         maxScore = score;
 
-    scoreText->setString("Score: " + std::to_string(maxScore));
+    scoreText->setString("Score: " + std::to_string((int)maxScore));
     window.draw(*scoreText);
 }
 

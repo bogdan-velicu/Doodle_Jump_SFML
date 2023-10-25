@@ -4,9 +4,18 @@
 #include <ostream>
 #include <string>
 #include <time.h>
-#include "PlatformGenerator.h"
 
 Platform::Platform() {
+    updateCount = 0;
+    type = PlatformType::NORMAL;
+
+    int x = 0;
+    int y = 800;
+
+    sprite.setPosition((float)x, (float)y);
+}
+
+void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
     std::cout << "Platform constructor called\n";
     
     PlatformType platformType = PlatformType::NORMAL;
@@ -26,27 +35,15 @@ Platform::Platform() {
         platformType = PlatformType::BOOST;
     }
 
-    // sf::Vector2f lastPlatformCoordinates = PlatformGenerator::getLastPlatformCoordinates();
-    Platform* lastPlatform = PlatformGenerator::getLastPlatform();
-    sf::Vector2f lastPlatformCoordinates = { 0.0f, 600.0f };
-    if (lastPlatform != nullptr) 
-        lastPlatformCoordinates = lastPlatform->getSprite().getPosition();
-
     int x = rand() % 700;
     while (abs((float)x - lastPlatformCoordinates.x) < 50.0f) {
         x = rand() % 700;
     }
 
-    // int y = (int)lastPlatformCoordinates.y - (rand() % maxHeightRandom + minHeightDifference);
     int y = (int)lastPlatformCoordinates.y - 75;
-
-    // PlatformGenerator::setLastPlatformCoordinates({ (float)x, (float)y });
-    PlatformGenerator::setLastPlatform(this);
-    PlatformGenerator::setLastPlatformType(platformType);
 
     type = platformType;
 
-    sprite = new sf::Sprite();
     switch (platformType) {
     case PlatformType::NORMAL:
         texture.loadFromFile("bin/assets/platform.png");
@@ -63,9 +60,8 @@ Platform::Platform() {
     default:
         break;
     }
-    sprite->setTexture(texture);
-
-    sprite->setPosition((float)x, (float)y);
+    sprite.setTexture(texture);
+    sprite.setPosition((float)x, (float)y);
 }
 
 std::ostream& operator<<(std::ostream& os, const PlatformType& platformType) {
@@ -95,36 +91,16 @@ std::ostream& operator<<(std::ostream& os, const Platform& platform) {
     return os;
 }
 
-Platform& Platform::operator=(const Platform& platform_) {
-    if (this == &platform_)
-        return *this;
-    type = platform_.type;
-    sprite = new sf::Sprite(platform_.texture);
-    updateCount = platform_.updateCount;
-    return *this;
-}
-
-Platform::Platform(const Platform& platform_) {
-    type = platform_.type;
-    sprite = new sf::Sprite(platform_.texture);
-    updateCount = platform_.updateCount;
-}
-
-Platform::~Platform() {
-    std::cout << "Platform destructor called\n";
-    delete sprite;
-}
-
 void Platform::moveSprite(const sf::Vector2f& coordinates_) {
-    sprite->move(coordinates_);
+    sprite.move(coordinates_);
 }
 
 void Platform::animateMovement() {
     if (updateCount < 100) {
-        sprite->move({ -1.0f, 0.0f });
+        sprite.move({ -1.0f, 0.0f });
     }
     else if (updateCount < 200) {
-        sprite->move({ 1.0f, 0.0f });
+        sprite.move({ 1.0f, 0.0f });
     }
     else {
         updateCount = 0;
@@ -137,9 +113,7 @@ PlatformType Platform::getType() const {
 }
 
 sf::Sprite Platform::getSprite() const {
-    if (sprite == nullptr)
-        return {};
-    return *sprite;
+    return sprite;
 }
 
 // sf::Texture Platform::getTexture() const {

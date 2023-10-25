@@ -1,4 +1,5 @@
 #include "./../platform/Platform.h"
+#include "./../platform/PlatformGenerator.h"
 #include "./../player/Player.h"
 #include "./../screen/GameScreen.h"
 
@@ -12,11 +13,12 @@ class Game {
     sf::RenderWindow window;
     const std::string windowTitle = "Doodle Jump SFML";
     sf::Font font;
-    int score;
-    int maxScore;
+    float score;
+    float maxScore;
     sf::Text *scoreText;
     Player *player;
     std::vector<Platform*> platforms;
+    PlatformGenerator platformGenerator;
 public:
     Game();
     ~Game();

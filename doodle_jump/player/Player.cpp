@@ -10,44 +10,12 @@ Player::Player() {
 
     texture.loadFromFile("bin/assets/player.png");
 
-    sprite = new sf::Sprite();
-    sprite->setTexture(texture);
-    sprite->setPosition(400, 550);
-}
-
-Player::~Player() {
-    std::cout << "Player destructor called\n";
-}
-
-Player::Player(const Player& player_) {
-    std::cout << "Player copy constructor called\n";
-    currentHeight = player_.currentHeight;
-
-    xVelocity = player_.xVelocity;
-    yVelocity = player_.yVelocity;
-
-    sprite = new sf::Sprite();
-    sprite->setTexture(texture);
-    sprite->setPosition(player_.sprite->getPosition());
-}
-
-Player& Player::operator=(const Player& player_) {
-    std::cout << "Player assignment operator called\n";
-    if (this != &player_) {
-        currentHeight = player_.currentHeight;
-
-        xVelocity = player_.xVelocity;
-        yVelocity = player_.yVelocity;
-
-        sprite = new sf::Sprite();
-        sprite->setTexture(texture);
-        sprite->setPosition(player_.sprite->getPosition());
-    }
-    return *this;
+    sprite.setTexture(texture);
+    sprite.setPosition(400, 550);
 }
 
 sf::Sprite Player::getSprite() const {
-    return *sprite;
+    return sprite;
 }
 
 // sf::Texture Player::getTexture() const {
@@ -55,7 +23,7 @@ sf::Sprite Player::getSprite() const {
 // }
 
 void Player::moveSprite(const sf::Vector2f& coordinates_) {
-    sprite->move(coordinates_);
+    sprite.move(coordinates_);
 }
 
 // void Player::setXVelocity(float xVelocity_) {
@@ -125,11 +93,11 @@ void Player::handleMovement() {
     }
 
     // Handle moving off screen
-    if (sprite->getPosition().x < 0.0f) {
-        sprite->setPosition(800.0f, sprite->getPosition().y);
+    if (sprite.getPosition().x < 0.0f) {
+        sprite.setPosition(800.0f, sprite.getPosition().y);
     }
-    else if (sprite->getPosition().x > 800.0f) {
-        sprite->setPosition(0.0f, sprite->getPosition().y);
+    else if (sprite.getPosition().x > 800.0f) {
+        sprite.setPosition(0.0f, sprite.getPosition().y);
     }
 
     // Handle gravity

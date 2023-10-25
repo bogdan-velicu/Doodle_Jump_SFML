@@ -12,16 +12,13 @@ class Player {
 private:
     sf::Texture texture = sf::Texture();
     PlayerState state = PlayerState::STANDING;
-    sf::Sprite *sprite;
+    sf::Sprite sprite = sf::Sprite();
     float currentHeight;
     float xVelocity;
     float yVelocity;
 public:
     Player();
-    ~Player();
     friend std::ostream& operator<<(std::ostream& out, const Player& player);
-    Player& operator=(const Player& player_);
-    Player(const Player& player_);
 
     // sf::Vector2f getCoordinates() const;
     // void setCoordinates(const sf::Vector2f& coordinates_);

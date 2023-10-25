@@ -1,29 +1,24 @@
 #include "PlatformGenerator.h"
+#include "Platform.h"
 
-// sf::Vector2f PlatformGenerator::lastPlatformCoordinates = { 350.0f, 600.0f };
-Platform* PlatformGenerator::lastPlatform = nullptr;
-PlatformType PlatformGenerator::lastPlatformType = PlatformType::NORMAL;
+PlatformGenerator::PlatformGenerator() {
+    std::cout << "PlatformGenerator constructor called\n";
 
-// sf::Vector2f PlatformGenerator::getLastPlatformCoordinates() {
-//     return lastPlatformCoordinates;
-// }
-
-Platform* PlatformGenerator::getLastPlatform() {
-    return lastPlatform;
+    lastPlatform = new Platform();
 }
 
-// PlatformType PlatformGenerator::getLastPlatformType() {
-//     return lastPlatformType;
+PlatformGenerator::~PlatformGenerator() {
+    std::cout << "PlatformGenerator destructor called\n";
+}
+
+// Platform PlatformGenerator::getLastPlatform() {
+//     return lastPlatform;
 // }
 
-// void PlatformGenerator::setLastPlatformCoordinates(const sf::Vector2f& lastPlatformCoordinates_) {
-//     lastPlatformCoordinates = lastPlatformCoordinates_;
-// }
+sf::Vector2f PlatformGenerator::getLastPlatformCoordinates() {
+    return lastPlatform->getSprite().getPosition();
+}
 
 void PlatformGenerator::setLastPlatform(Platform* lastPlatform_) {
     lastPlatform = lastPlatform_;
-}
-
-void PlatformGenerator::setLastPlatformType(PlatformType lastPlatformType_) {
-    lastPlatformType = lastPlatformType_;
 }
