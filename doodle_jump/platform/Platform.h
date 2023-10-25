@@ -21,7 +21,7 @@ public:
     Platform();
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
     Platform& operator=(const Platform& platform_);
-    Platform(const Platform& platform_) = default;
+    Platform(const Platform& platform_);
     ~Platform();
     PlatformType getType() const;
     sf::Sprite getSprite() const;

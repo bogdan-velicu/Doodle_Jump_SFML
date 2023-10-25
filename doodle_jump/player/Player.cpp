@@ -8,7 +8,6 @@ Player::Player() {
     xVelocity = 0;
     yVelocity = 0;
 
-    texture = sf::Texture();
     texture.loadFromFile("bin/assets/player.png");
 
     sprite = new sf::Sprite();
@@ -20,13 +19,44 @@ Player::~Player() {
     std::cout << "Player destructor called\n";
 }
 
+Player::Player(const Player& player_) {
+    std::cout << "Player copy constructor called\n";
+    currentHeight = player_.currentHeight;
+
+    xVelocity = player_.xVelocity;
+    yVelocity = player_.yVelocity;
+
+    texture = player_.texture;
+
+    sprite = new sf::Sprite();
+    sprite->setTexture(texture);
+    sprite->setPosition(player_.sprite->getPosition());
+}
+
+Player& Player::operator=(const Player& player_) {
+    std::cout << "Player assignment operator called\n";
+    if (this != &player_) {
+        currentHeight = player_.currentHeight;
+
+        xVelocity = player_.xVelocity;
+        yVelocity = player_.yVelocity;
+
+        texture = player_.texture;
+
+        sprite = new sf::Sprite();
+        sprite->setTexture(texture);
+        sprite->setPosition(player_.sprite->getPosition());
+    }
+    return *this;
+}
+
 sf::Sprite Player::getSprite() const {
     return *sprite;
 }
 
-sf::Texture Player::getTexture() const {
-    return texture;
-}
+// sf::Texture Player::getTexture() const {
+//     return texture;
+// }
 
 void Player::moveSprite(const sf::Vector2f& coordinates_) {
     sprite->move(coordinates_);
@@ -54,16 +84,26 @@ sf::Vector2f Player::getVelocity() const {
 
 void Player::jump() {
     yVelocity = -12.0f;
+    state = PlayerState::JUMPING;
 }
 
 void Player::moveLeft() {
-    if (xVelocity > -5.0f)
+    if (xVelocity > -5.0f) {
         xVelocity -= 1.0f;
+        // Failed attempt at flipping player sprite
+        // if (state == PlayerState::MOVING_RIGHT)
+        //     sprite->scale(-1.0f, 1.0f);
+        state = PlayerState::MOVING_LEFT;
+    }
 }
 
 void Player::moveRight() {
-    if (xVelocity < 5.0f)
+    if (xVelocity < 5.0f) {
         xVelocity += 1.0f;
+        // if (state == PlayerState::MOVING_LEFT)
+        //     sprite->scale(-1.0f, 1.0f);
+        state = PlayerState::MOVING_RIGHT;
+    }
 }
 
 void Player::handleMovement() {

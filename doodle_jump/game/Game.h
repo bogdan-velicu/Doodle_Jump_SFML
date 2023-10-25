@@ -24,7 +24,7 @@ public:
     Game(const Game& game_);
     friend std::ostream& operator<<(std::ostream& out, const Game& game);
     void run();
-    int getScore() const;
+    // int getScore() const;
     // void setScore(int score);
     void changeScreen(ScreenType screenType);
     void play();

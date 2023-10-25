@@ -105,6 +105,13 @@ Platform& Platform::operator=(const Platform& platform_) {
     return *this;
 }
 
+Platform::Platform(const Platform& platform_) {
+    type = platform_.type;
+    texture = platform_.texture;
+    sprite = platform_.sprite;
+    updateCount = platform_.updateCount;
+}
+
 Platform::~Platform() {
     std::cout << "Platform destructor called\n";
     delete sprite;

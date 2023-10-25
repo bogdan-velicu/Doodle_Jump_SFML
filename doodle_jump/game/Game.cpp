@@ -92,12 +92,13 @@ void Game::reset() {
         delete platform;
     }
     platforms.clear();
+
+    PlatformGenerator::setLastPlatform(nullptr);
+    PlatformGenerator::setLastPlatformType(PlatformType::NORMAL);
+
     for (int i = 0; i < 15; i++) {
         platforms.push_back(new Platform());
     }
-    // PlatformGenerator::setLastPlatformCoordinates({ 0.0f, 600.0f });
-    PlatformGenerator::setLastPlatform(nullptr);
-    PlatformGenerator::setLastPlatformType(PlatformType::NORMAL);
     score = 0;
     maxScore = 0;
 }
@@ -169,7 +170,6 @@ void Game::checkCollision() {
     // Handle ground collision
     if (lowerPlayerBounds.getPosition().y > 600.0f) {
         if (score > 150) {
-            reset();
             changeScreen(ScreenType::GAME_OVER);
         }
         else
@@ -208,16 +208,10 @@ void Game::checkCollision() {
 }
 
 void Game::displayDebugInfo() {
-    sf::Vector2f playerCoordinates = player->getSprite().getPosition();
-    std::cout << "Player coordinates: (" << playerCoordinates.x << ", " << playerCoordinates.y << ")\n";
-    std::cout << "Player velocity: (" << player->getXVelocity() << ", " << player->getYVelocity() << ")\n";
-    for (auto& platform : platforms) {
-        sf::Vector2f platformCoordinates = platform->getSprite().getPosition();
-        std::cout << "Platform coordinates: (" << platformCoordinates.x << ", " << platformCoordinates.y << ")\n";
-    }
     sf::Text debugText = sf::Text();
     debugText.setFont(font);
-    debugText.setString(std::to_string(playerCoordinates.x) + ", " + std::to_string(playerCoordinates.y));
+    sf::Vector2f velocity = player->getVelocity();
+    debugText.setString("xVelocity: " + std::to_string(velocity.x) + "\nyVelocity: " + std::to_string(velocity.y));
     debugText.setCharacterSize(36);
     debugText.setFillColor(sf::Color::Black);
     debugText.setPosition(60, 60);
@@ -267,9 +261,9 @@ void Game::displayScore() {
     window.draw(*scoreText);
 }
 
-int Game::getScore() const {
-    return score;
-}
+// int Game::getScore() const {
+//     return score;
+// }
 
 // void Game::setScore(int score_) {
 //     score = score_;
