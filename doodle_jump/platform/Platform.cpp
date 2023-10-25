@@ -99,16 +99,14 @@ Platform& Platform::operator=(const Platform& platform_) {
     if (this == &platform_)
         return *this;
     type = platform_.type;
-    texture = platform_.texture;
-    sprite = platform_.sprite;
+    sprite = new sf::Sprite(platform_.texture);
     updateCount = platform_.updateCount;
     return *this;
 }
 
 Platform::Platform(const Platform& platform_) {
     type = platform_.type;
-    texture = platform_.texture;
-    sprite = platform_.sprite;
+    sprite = new sf::Sprite(platform_.texture);
     updateCount = platform_.updateCount;
 }
 

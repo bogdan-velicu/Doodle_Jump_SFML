@@ -26,8 +26,6 @@ Player::Player(const Player& player_) {
     xVelocity = player_.xVelocity;
     yVelocity = player_.yVelocity;
 
-    texture = player_.texture;
-
     sprite = new sf::Sprite();
     sprite->setTexture(texture);
     sprite->setPosition(player_.sprite->getPosition());
@@ -40,8 +38,6 @@ Player& Player::operator=(const Player& player_) {
 
         xVelocity = player_.xVelocity;
         yVelocity = player_.yVelocity;
-
-        texture = player_.texture;
 
         sprite = new sf::Sprite();
         sprite->setTexture(texture);
