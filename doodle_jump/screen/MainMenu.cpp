@@ -29,7 +29,7 @@ void MainMenu::render(sf::RenderWindow& window) {
     window.display();
 }
 
-void MainMenu::handleInput(sf::Event& event, ScreenType& currentScreen) {
+void MainMenu::handleInput(const sf::Event& event, ScreenType& currentScreen) {
     std::cout << "MainMenu handleInput called\n";
     switch (event.key.code) {
     case sf::Keyboard::Enter:

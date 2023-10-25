@@ -32,9 +32,9 @@ void Player::moveSprite(const sf::Vector2f& coordinates_) {
     sprite->move(coordinates_);
 }
 
-void Player::setXVelocity(float xVelocity_) {
-    xVelocity = xVelocity_;
-}
+// void Player::setXVelocity(float xVelocity_) {
+//     xVelocity = xVelocity_;
+// }
 
 void Player::setYVelocity(float yVelocity_) {
     yVelocity = yVelocity_;
@@ -112,10 +112,10 @@ std::ostream& operator<<(std::ostream& out, const Player& player) {
     return out;
 }
 
-sf::Vector2f Player::getCoordinates() const {
-    return sprite->getPosition();
-}
+// sf::Vector2f Player::getCoordinates() const {
+//     return sprite->getPosition();
+// }
 
-void Player::setCoordinates(const sf::Vector2f& coordinates_) {
-    sprite->setPosition(coordinates_);
-}
+// void Player::setCoordinates(const sf::Vector2f& coordinates_) {
+//     sprite->setPosition(coordinates_);
+// }

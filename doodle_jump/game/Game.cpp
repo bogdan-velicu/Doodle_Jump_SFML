@@ -3,9 +3,7 @@
 #include "./../screen/PlayScreen.h"
 #include "./../screen/GameOver.h"
 #include <iostream>
-#include <new>
 #include <string>
-#include <sys/errno.h>
 #include "./../platform/PlatformGenerator.h"
 
 const int SCREEN_WIDTH = 800;
@@ -14,7 +12,6 @@ const int SCREEN_HEIGHT = 600;
 Game::Game() {
     std::cout << "Game constructor called\n";
     currentScreen = ScreenType::MAIN_MENU;
-    windowTitle = "Doodle Jump SFML";
     score = 0;
     maxScore = 0;
     player = new Player();
@@ -44,6 +41,41 @@ Game::~Game() {
     for (auto& platform : platforms) {
         delete platform;
     }
+}
+
+Game& Game::operator=(const Game& game_) {
+    std::cout << "Game assignment operator called\n";
+    if (this != &game_) {
+        currentScreen = game_.currentScreen;
+        score = game_.score;
+        maxScore = game_.maxScore;
+        player = new Player(*game_.player);
+        platforms = std::vector<Platform*>();
+        for (auto& platform : game_.platforms) {
+            platforms.push_back(new Platform(*platform));
+        }
+        font = game_.font;
+        scoreText = new sf::Text(*game_.scoreText);
+        window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
+        window.setFramerateLimit(120);
+    }
+    return *this;
+}
+
+Game::Game(const Game& game_) {
+    std::cout << "Game copy constructor called\n";
+    currentScreen = game_.currentScreen;
+    score = game_.score;
+    maxScore = game_.maxScore;
+    player = new Player(*game_.player);
+    platforms = std::vector<Platform*>();
+    for (auto& platform : game_.platforms) {
+        platforms.push_back(new Platform(*platform));
+    }
+    font = game_.font;
+    scoreText = new sf::Text(*game_.scoreText);
+    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
+    window.setFramerateLimit(120);
 }
 
 std::ostream& operator<<(std::ostream& out, const Game& game) {
@@ -239,9 +271,9 @@ int Game::getScore() const {
     return score;
 }
 
-void Game::setScore(int score_) {
-    score = score_;
-}
+// void Game::setScore(int score_) {
+//     score = score_;
+// }
 
 void Game::changeScreen(ScreenType screenType) {
     currentScreen = screenType;

@@ -25,7 +25,7 @@ public:
     ~Platform();
     PlatformType getType() const;
     sf::Sprite getSprite() const;
-    sf::Texture getTexture() const;
+    // sf::Texture getTexture() const;
     void moveSprite(const sf::Vector2f& coordinates_);
     void animateMovement();
 };

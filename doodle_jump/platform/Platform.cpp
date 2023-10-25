@@ -95,7 +95,15 @@ std::ostream& operator<<(std::ostream& os, const Platform& platform) {
     return os;
 }
 
-Platform& Platform::operator=(const Platform& platform_) = default;
+Platform& Platform::operator=(const Platform& platform_) {
+    if (this == &platform_)
+        return *this;
+    type = platform_.type;
+    texture = platform_.texture;
+    sprite = platform_.sprite;
+    updateCount = platform_.updateCount;
+    return *this;
+}
 
 Platform::~Platform() {
     std::cout << "Platform destructor called\n";
@@ -129,6 +137,6 @@ sf::Sprite Platform::getSprite() const {
     return *sprite;
 }
 
-sf::Texture Platform::getTexture() const {
-    return texture;
-}
+// sf::Texture Platform::getTexture() const {
+//     return texture;
+// }

@@ -16,9 +16,9 @@ GameScreen::GameScreen(ScreenType screenType_) {
     screenType = screenType_;
 }
 
-ScreenType GameScreen::getScreenType() const {
-    return screenType;
-}
+// ScreenType GameScreen::getScreenType() const {
+//     return screenType;
+// }
 
 void GameScreen::setScreenType(ScreenType screenType_) {
     screenType = screenType_;

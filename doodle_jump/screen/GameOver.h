@@ -6,5 +6,5 @@ public:
     GameOver();
     ~GameOver();
     static void render(sf::RenderWindow& window);
-    static void handleInput(sf::Event& event, ScreenType& currentScreen);
+    static void handleInput(const sf::Event& event, ScreenType& currentScreen);
 };

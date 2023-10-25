@@ -11,7 +11,7 @@ private:
 public:
     // static sf::Vector2f getLastPlatformCoordinates();
     static Platform* getLastPlatform();
-    static PlatformType getLastPlatformType();
+    // static PlatformType getLastPlatformType();
 
     // static void setLastPlatformCoordinates(const sf::Vector2f& lastPlatformCoordinates_);
     static void setLastPlatform(Platform* lastPlatform_);

@@ -5,5 +5,5 @@ class PlayScreen : private GameScreen {
 public:
     PlayScreen();
     ~PlayScreen();
-    static void handleInput(sf::Event& event, ScreenType& currentScreen);
+    static void handleInput(const sf::Event& event, ScreenType& currentScreen);
 };

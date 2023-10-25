@@ -12,9 +12,9 @@ Platform* PlatformGenerator::getLastPlatform() {
     return lastPlatform;
 }
 
-PlatformType PlatformGenerator::getLastPlatformType() {
-    return lastPlatformType;
-}
+// PlatformType PlatformGenerator::getLastPlatformType() {
+//     return lastPlatformType;
+// }
 
 // void PlatformGenerator::setLastPlatformCoordinates(const sf::Vector2f& lastPlatformCoordinates_) {
 //     lastPlatformCoordinates = lastPlatformCoordinates_;

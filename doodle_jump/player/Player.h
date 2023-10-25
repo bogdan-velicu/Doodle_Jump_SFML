@@ -11,11 +11,13 @@ public:
     Player();
     ~Player();
     friend std::ostream& operator<<(std::ostream& out, const Player& player);
+    Player& operator=(const Player& player_) = default;
+    Player(const Player& player_) = default;
 
-    sf::Vector2f getCoordinates() const;
-    void setCoordinates(const sf::Vector2f& coordinates_);
+    // sf::Vector2f getCoordinates() const;
+    // void setCoordinates(const sf::Vector2f& coordinates_);
 
-    void setXVelocity(float xVelocity_);
+    // void setXVelocity(float xVelocity_);
     void setYVelocity(float yVelocity_);
 
     float getXVelocity() const;

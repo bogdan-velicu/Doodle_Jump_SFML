@@ -9,7 +9,7 @@ PlayScreen::~PlayScreen() {
     std::cout << "PlayScreen destructor called\n";
 }
 
-void PlayScreen::handleInput(sf::Event& event, ScreenType& currentScreen) {
+void PlayScreen::handleInput(const sf::Event& event, ScreenType& currentScreen) {
     std::cout << "PlayScreen handleInput called\n";
     switch (event.key.code) {
     case sf::Keyboard::Escape:

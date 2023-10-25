@@ -10,7 +10,7 @@
 class Game {
     ScreenType currentScreen;
     sf::RenderWindow window;
-    std::string windowTitle;
+    const std::string windowTitle = "Doodle Jump SFML";
     sf::Font font;
     int score;
     int maxScore;
@@ -20,10 +20,12 @@ class Game {
 public:
     Game();
     ~Game();
+    Game& operator=(const Game& game_);
+    Game(const Game& game_);
     friend std::ostream& operator<<(std::ostream& out, const Game& game);
     void run();
     int getScore() const;
-    void setScore(int score);
+    // void setScore(int score);
     void changeScreen(ScreenType screenType);
     void play();
     void reset();

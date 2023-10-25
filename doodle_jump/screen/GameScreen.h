@@ -35,7 +35,7 @@ public:
     ~GameScreen();
     explicit GameScreen(ScreenType screenType);
     friend std::ostream& operator<<(std::ostream& out, const ScreenType& screenType);
-    ScreenType getScreenType() const;
+    // ScreenType getScreenType() const;
     void setScreenType(ScreenType screenType);
     void render();
 };

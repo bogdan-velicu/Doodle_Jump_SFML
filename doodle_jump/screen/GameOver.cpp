@@ -26,7 +26,7 @@ void GameOver::render(sf::RenderWindow& window) {
     window.display();
 }
 
-void GameOver::handleInput(sf::Event& event, ScreenType& currentScreen) {
+void GameOver::handleInput(const sf::Event& event, ScreenType& currentScreen) {
     std::cout << "GameOver handleInput called\n";
     switch (event.key.code) {
     case sf::Keyboard::Enter:
