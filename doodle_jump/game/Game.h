@@ -18,7 +18,7 @@ class Game {
     sf::Text *scoreText;
     Player *player;
     std::vector<Platform*> platforms;
-    PlatformGenerator platformGenerator;
+    PlatformGenerator platformGenerator = PlatformGenerator();
 public:
     Game();
     ~Game();

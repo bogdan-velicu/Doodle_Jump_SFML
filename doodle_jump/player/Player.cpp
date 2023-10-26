@@ -8,7 +8,7 @@ Player::Player() {
     xVelocity = 0;
     yVelocity = 0;
 
-    texture.loadFromFile("bin/assets/player.png");
+    texture.loadFromFile("assets/player.png");
 
     sprite.setTexture(texture);
     sprite.setPosition(400, 550);

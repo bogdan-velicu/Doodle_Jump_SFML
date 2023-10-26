@@ -12,7 +12,6 @@ const int SCREEN_HEIGHT = 600;
 Game::Game() {
     std::cout << "Game constructor called\n";
     currentScreen = ScreenType::MAIN_MENU;
-    platformGenerator = PlatformGenerator();
     score = 0;
     maxScore = 0;
     player = new Player();
@@ -26,7 +25,7 @@ Game::Game() {
     }
 
     font = sf::Font();
-    font.loadFromFile("bin/fonts/Valoon.ttf");
+    font.loadFromFile("fonts/Valoon.ttf");
 
     scoreText = new sf::Text();
     scoreText->setFont(font);

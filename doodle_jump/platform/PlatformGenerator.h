@@ -10,7 +10,7 @@ private:
 public:
     PlatformGenerator();
     ~PlatformGenerator();
-    // Platform getLastPlatform();
+    PlatformGenerator& operator=(const PlatformGenerator& platformGenerator_);
     sf::Vector2f getLastPlatformCoordinates();
     void setLastPlatform(Platform* lastPlatform_);
 };

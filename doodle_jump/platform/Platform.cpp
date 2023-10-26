@@ -46,16 +46,16 @@ void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
 
     switch (platformType) {
     case PlatformType::NORMAL:
-        texture.loadFromFile("bin/assets/platform.png");
+        texture.loadFromFile("assets/platform.png");
         break;
     case PlatformType::BREAKABLE:
-        texture.loadFromFile("bin/assets/platform_break.png");
+        texture.loadFromFile("assets/platform_break.png");
         break;
     case PlatformType::MOVING:
-        texture.loadFromFile("bin/assets/platform_moving.png");
+        texture.loadFromFile("assets/platform_moving.png");
         break;
     case PlatformType::BOOST:
-        texture.loadFromFile("bin/assets/platform_boost.png");
+        texture.loadFromFile("assets/platform_boost.png");
         break;
     default:
         break;
