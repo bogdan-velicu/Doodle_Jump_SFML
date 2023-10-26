@@ -19,6 +19,11 @@ PlatformGenerator& PlatformGenerator::operator=(const PlatformGenerator& platfor
     return *this;
 }
 
+PlatformGenerator::PlatformGenerator(const PlatformGenerator& platformGenerator_) {
+    std::cout << "PlatformGenerator copy constructor called\n";
+    lastPlatform = platformGenerator_.lastPlatform;
+}
+
 // Platform PlatformGenerator::getLastPlatform() {
 //     return lastPlatform;
 // }
