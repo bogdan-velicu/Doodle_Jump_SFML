@@ -19,11 +19,9 @@ Platform::~Platform() {
     std::cout << "Platform destructor called\n";
 }
 
-Platform::Platform(const Platform& platform) {
+Platform::Platform(const Platform& platform) : texture(platform.texture), sprite(platform.sprite) {
     std::cout << "Platform copy constructor called\n";
     type = platform.type;
-    texture = platform.texture;
-    sprite = platform.sprite;
     updateCount = platform.updateCount;
 }
 

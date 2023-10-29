@@ -21,12 +21,14 @@ class Game {
 public:
     Game();
     ~Game();
+    Game(const Game& game); // for cppcheck
+    Game& operator=(const Game& game); // for cppcheck
     friend std::ostream& operator<<(std::ostream& out, const Game& game);
     void run();
     void changeScreen(ScreenType screenType);
     void play();
     void reset();
-    void displayDebugInfo();
+    // void displayDebugInfo();
     void displayScore();
     void checkCollision();
 };

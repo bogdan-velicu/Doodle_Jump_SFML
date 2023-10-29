@@ -48,6 +48,45 @@ Game::~Game() {
     delete scoreText;
 }
 
+Game::Game(const Game& game) {
+    std::cout << "Game copy constructor called\n";
+    currentScreen = game.currentScreen;
+
+    if (window.isOpen())
+        window.close();
+    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
+    window.setFramerateLimit(120);
+
+    font = game.font;
+    score = game.score;
+    maxScore = game.maxScore;
+    scoreText = game.scoreText;
+    player = game.player;
+    platforms = game.platforms;
+    lastPlatform = game.lastPlatform;
+}
+
+Game& Game::operator=(const Game& game) {
+    std::cout << "Game copy assignment operator called\n";
+    if (this != &game) {
+        currentScreen = game.currentScreen;
+
+        if (window.isOpen())
+            window.close();
+        window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
+        window.setFramerateLimit(120);
+
+        font = game.font;
+        score = game.score;
+        maxScore = game.maxScore;
+        scoreText = game.scoreText;
+        player = game.player;
+        platforms = game.platforms;
+        lastPlatform = game.lastPlatform;
+    }
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& out, const Game& game) {
     out << "Game object\n"
         << "Current screen: " << game.currentScreen << '\n'
@@ -182,17 +221,17 @@ void Game::checkCollision() {
     }
 }
 
-void Game::displayDebugInfo() {
-    sf::Text debugText = sf::Text();
-    debugText.setFont(font);
-    sf::Vector2f velocity = player->getVelocity();
-    debugText.setString("xVelocity: " + std::to_string(velocity.x) + "\nyVelocity: " + std::to_string(velocity.y));
-    debugText.setCharacterSize(36);
-    debugText.setFillColor(sf::Color::Black);
-    debugText.setPosition(60, 60);
+// void Game::displayDebugInfo() {
+//     sf::Text debugText = sf::Text();
+//     debugText.setFont(font);
+//     sf::Vector2f velocity = player->getVelocity();
+//     debugText.setString("xVelocity: " + std::to_string(velocity.x) + "\nyVelocity: " + std::to_string(velocity.y));
+//     debugText.setCharacterSize(36);
+//     debugText.setFillColor(sf::Color::Black);
+//     debugText.setPosition(60, 60);
 
-    window.draw(debugText);
-}
+//     window.draw(debugText);
+// }
 
 void Game::play() {
     player->update();
@@ -225,7 +264,7 @@ void Game::play() {
         window.draw(platform->getSprite());
     }
     displayScore();
-    displayDebugInfo();
+    // displayDebugInfo();
 
     window.display();
 }
