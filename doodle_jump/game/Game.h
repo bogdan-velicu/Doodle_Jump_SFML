@@ -1,5 +1,4 @@
 #include "./../platform/Platform.h"
-#include "./../platform/PlatformGenerator.h"
 #include "./../player/Player.h"
 #include "./../screen/GameScreen.h"
 
@@ -18,16 +17,12 @@ class Game {
     sf::Text *scoreText;
     Player *player;
     std::vector<Platform*> platforms;
-    PlatformGenerator platformGenerator = PlatformGenerator();
+    Platform* lastPlatform;
 public:
     Game();
     ~Game();
-    Game& operator=(const Game& game_);
-    Game(const Game& game_);
     friend std::ostream& operator<<(std::ostream& out, const Game& game);
     void run();
-    // int getScore() const;
-    // void setScore(int score);
     void changeScreen(ScreenType screenType);
     void play();
     void reset();

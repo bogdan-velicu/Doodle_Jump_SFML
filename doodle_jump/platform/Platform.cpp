@@ -15,6 +15,29 @@ Platform::Platform() {
     sprite.setPosition((float)x, (float)y);
 }
 
+Platform::~Platform() {
+    std::cout << "Platform destructor called\n";
+}
+
+Platform::Platform(const Platform& platform) {
+    std::cout << "Platform copy constructor called\n";
+    type = platform.type;
+    texture = platform.texture;
+    sprite = platform.sprite;
+    updateCount = platform.updateCount;
+}
+
+Platform& Platform::operator=(const Platform& platform) {
+    std::cout << "Platform copy assignment operator called\n";
+    if (this != &platform) {
+        type = platform.type;
+        texture = platform.texture;
+        sprite = platform.sprite;
+        updateCount = platform.updateCount;
+    }
+    return *this;
+}
+
 void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
     std::cout << "Platform constructor called\n";
     

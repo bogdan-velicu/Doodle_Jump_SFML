@@ -4,7 +4,6 @@
 #include "./../screen/GameOver.h"
 #include <iostream>
 #include <string>
-#include "./../platform/PlatformGenerator.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -16,11 +15,12 @@ Game::Game() {
     maxScore = 0;
     player = new Player();
     platforms = std::vector<Platform*>();
+    lastPlatform = new Platform();
     
     for (int i = 0; i < 15; i++) {
         auto platform = new Platform();
-        platform->useGenerator(platformGenerator.getLastPlatformCoordinates());
-        platformGenerator.setLastPlatform(platform);
+        platform->useGenerator(lastPlatform->getSprite().getPosition());
+        lastPlatform = platform;
         platforms.push_back(platform);
     }
 
@@ -44,6 +44,8 @@ Game::~Game() {
     for (auto& platform : platforms) {
         delete platform;
     }
+    delete lastPlatform;
+    delete scoreText;
 }
 
 std::ostream& operator<<(std::ostream& out, const Game& game) {
@@ -61,12 +63,12 @@ void Game::reset() {
     }
     platforms.clear();
 
-    platformGenerator.setLastPlatform(new Platform());
+    lastPlatform = new Platform();
 
     for (int i = 0; i < 15; i++) {
         auto platform = new Platform();
-        platform->useGenerator(platformGenerator.getLastPlatformCoordinates());
-        platformGenerator.setLastPlatform(platform);
+        platform->useGenerator(lastPlatform->getSprite().getPosition());
+        lastPlatform = platform;
         platforms.push_back(platform);
     }
     score = 0;
@@ -162,8 +164,8 @@ void Game::checkCollision() {
                     if (platform->getType() == PlatformType::BREAKABLE) {
                         delete platform;
                         auto plat = new Platform();
-                        plat->useGenerator(platformGenerator.getLastPlatformCoordinates());
-                        platformGenerator.setLastPlatform(plat);
+                        plat->useGenerator(lastPlatform->getSprite().getPosition());
+                        lastPlatform = plat;
                         platform = plat;
                     }
                     else if (platform->getType() == PlatformType::BOOST) {
@@ -202,8 +204,8 @@ void Game::play() {
             if (platform->getSprite().getPosition().y > 750.0f) {
                 delete platform;
                 auto plat = new Platform();
-                plat->useGenerator(platformGenerator.getLastPlatformCoordinates());
-                platformGenerator.setLastPlatform(plat);
+                plat->useGenerator(lastPlatform->getSprite().getPosition());
+                lastPlatform = plat;
                 platform = plat;
             }
 
@@ -236,14 +238,6 @@ void Game::displayScore() {
     scoreText->setString("Score: " + std::to_string((int)maxScore));
     window.draw(*scoreText);
 }
-
-// int Game::getScore() const {
-//     return score;
-// }
-
-// void Game::setScore(int score_) {
-//     score = score_;
-// }
 
 void Game::changeScreen(ScreenType screenType) {
     currentScreen = screenType;

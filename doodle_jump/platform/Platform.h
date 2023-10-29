@@ -19,6 +19,9 @@ private:
     int updateCount;
 public:
     Platform();
+    ~Platform();
+    Platform(const Platform& platform);
+    Platform& operator=(const Platform& platform);
     void useGenerator(const sf::Vector2f& lastPlatformCoordinates);
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
     PlatformType getType() const;
