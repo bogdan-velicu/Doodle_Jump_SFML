@@ -13,78 +13,39 @@ Game::Game() {
     currentScreen = ScreenType::MAIN_MENU;
     score = 0;
     maxScore = 0;
-    player = new Player();
-    platforms = std::vector<Platform*>();
+    
+    platformTextures = std::vector<sf::Texture>();
+    initPlatformTextures();
+
+    platforms = std::vector<Platform>();
+    powerups = std::vector<Powerups>();
+    powerup = nullptr;
+
     lastPlatform = new Platform();
     
-    for (int i = 0; i < 15; i++) {
-        auto platform = new Platform();
-        platform->useGenerator(lastPlatform->getSprite().getPosition());
-        lastPlatform = platform;
+    for (int i = 0; i < 20; i++) {
+        auto platform = Platform();
+        platform.useGenerator(lastPlatform->getSprite().getPosition());
+        platform.assignTexture(pickTexture(platform.getType()));
         platforms.push_back(platform);
+        lastPlatform = &platforms[i];
     }
 
     font = sf::Font();
     font.loadFromFile("fonts/Valoon.ttf");
 
-    scoreText = new sf::Text();
-    scoreText->setFont(font);
-    scoreText->setString(std::to_string(score));
-    scoreText->setCharacterSize(36);
-    scoreText->setFillColor(sf::Color::Black);
-    scoreText->setPosition(20, 20);
+    scoreText.setFont(font);
+    scoreText.setString(std::to_string(score));
+    scoreText.setCharacterSize(36);
+    scoreText.setFillColor(sf::Color::Black);
+    scoreText.setPosition(20, 20);
 
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(100);
 }
 
 Game::~Game() {
     std::cout << "Game destructor called\n";
-    delete player;
-    for (auto& platform : platforms) {
-        delete platform;
-    }
-    delete lastPlatform;
-    delete scoreText;
-}
-
-Game::Game(const Game& game) {
-    std::cout << "Game copy constructor called\n";
-    currentScreen = game.currentScreen;
-
-    if (window.isOpen())
-        window.close();
-    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
-    window.setFramerateLimit(120);
-
-    font = game.font;
-    score = game.score;
-    maxScore = game.maxScore;
-    scoreText = game.scoreText;
-    player = game.player;
-    platforms = game.platforms;
-    lastPlatform = game.lastPlatform;
-}
-
-Game& Game::operator=(const Game& game) {
-    std::cout << "Game copy assignment operator called\n";
-    if (this != &game) {
-        currentScreen = game.currentScreen;
-
-        if (window.isOpen())
-            window.close();
-        window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), windowTitle, sf::Style::Default);
-        window.setFramerateLimit(120);
-
-        font = game.font;
-        score = game.score;
-        maxScore = game.maxScore;
-        scoreText = game.scoreText;
-        player = game.player;
-        platforms = game.platforms;
-        lastPlatform = game.lastPlatform;
-    }
-    return *this;
 }
 
 std::ostream& operator<<(std::ostream& out, const Game& game) {
@@ -95,20 +56,18 @@ std::ostream& operator<<(std::ostream& out, const Game& game) {
 }
 
 void Game::reset() {
-    delete player;
-    player = new Player();
-    for (auto& platform : platforms) {
-        delete platform;
-    }
     platforms.clear();
 
     lastPlatform = new Platform();
+    powerups.clear();
+    powerup = nullptr;
 
-    for (int i = 0; i < 15; i++) {
-        auto platform = new Platform();
-        platform->useGenerator(lastPlatform->getSprite().getPosition());
-        lastPlatform = platform;
+    for (int i = 0; i < 20; i++) {
+        auto platform = Platform();
+        platform.useGenerator(lastPlatform->getSprite().getPosition());
+        platform.assignTexture(pickTexture(platform.getType()));
         platforms.push_back(platform);
+        lastPlatform = &platforms[i];
     }
     score = 0;
     maxScore = 0;
@@ -174,7 +133,7 @@ void Game::run() {
 
 void Game::checkCollision() {
     // Get only lower part of player sprite
-    sf::FloatRect lowerPlayerBounds = player->getSprite().getGlobalBounds();
+    sf::FloatRect lowerPlayerBounds = player.getSprite().getGlobalBounds();
     lowerPlayerBounds.top += lowerPlayerBounds.height - 5;
     lowerPlayerBounds.height = 5;
 
@@ -184,39 +143,40 @@ void Game::checkCollision() {
             changeScreen(ScreenType::GAME_OVER);
         }
         else
-            player->jump();
+            player.jump();
     }
 
     // sf::FloatRect playerBounds = player->getSprite().getGlobalBounds();
     for (auto& platform : platforms) {
         // Get only upper part of platform sprite
-        sf::FloatRect upperPlatformBounds = platform->getSprite().getGlobalBounds();
+        sf::FloatRect upperPlatformBounds = platform.getSprite().getGlobalBounds();
         upperPlatformBounds.height = 5;
 
         // sf::FloatRect platformBounds = platform->getSprite().getGlobalBounds();
         if (lowerPlayerBounds.intersects(upperPlatformBounds)) {
-            if (player->getSprite().getPosition().y < platform->getSprite().getPosition().y) {
+            if (player.getSprite().getPosition().y < platform.getSprite().getPosition().y) {
                 // Jump only if player is falling
-                if (player->getYVelocity() > 0.2f) {
-                    player->jump();
+                if (player.getYVelocity() > 0.2f) {
+                    player.jump();
 
-                    if (platform->getType() == PlatformType::BREAKABLE) {
-                        delete platform;
-                        auto plat = new Platform();
-                        plat->useGenerator(lastPlatform->getSprite().getPosition());
-                        lastPlatform = plat;
-                        platform = plat;
+                    if (platform.getType() == PlatformType::BREAKABLE) {
+                        // delete platform;
+                        auto plat = Platform();
+                        plat.useGenerator(lastPlatform->getSprite().getPosition());
+                        plat.assignTexture(pickTexture(plat.getType()));
+                        platforms[&platform - &platforms[0]] = plat;
+                        lastPlatform = &platforms[&platform - &platforms[0]];
                     }
-                    else if (platform->getType() == PlatformType::BOOST) {
-                        player->setYVelocity(-20.0f);
+                    else if (platform.getType() == PlatformType::BOOST) {
+                        player.setYVelocity(-20.0f);
                     }
                 }
             }
         }
 
         // Handle moving platforms
-        if (platform->getType() == PlatformType::MOVING) {
-            platform->animateMovement();
+        if (platform.getType() == PlatformType::MOVING) {
+            platform.animateMovement();
         }
     }
 }
@@ -234,34 +194,35 @@ void Game::checkCollision() {
 // }
 
 void Game::play() {
-    player->update();
+    player.update();
     checkCollision();
-    sf::Vector2f velocity = player->getVelocity();
+    sf::Vector2f velocity = player.getVelocity();
 
-    if (player->getSprite().getPosition().y < 300 && maxScore - score < 200) {
+    if (player.getSprite().getPosition().y < 300 && maxScore - score < 200) {
         for (auto& platform : platforms) {
-            if (platform->getSprite().getPosition().y > 750.0f) {
-                delete platform;
-                auto plat = new Platform();
-                plat->useGenerator(lastPlatform->getSprite().getPosition());
-                lastPlatform = plat;
-                platform = plat;
+            if (platform.getSprite().getPosition().y > 750.0f) {
+                // delete platform;
+                auto plat = Platform();
+                plat.useGenerator(lastPlatform->getSprite().getPosition());
+                plat.assignTexture(pickTexture(plat.getType()));
+                platforms[&platform - &platforms[0]] = plat;
+                lastPlatform = &platforms[&platform - &platforms[0]];
             }
 
-            float yVelocity = player->getYVelocity();
-            platform->moveSprite({0.0f, -yVelocity});
+            float yVelocity = player.getYVelocity();
+            platform.moveSprite({0.0f, -yVelocity});
         }
     }
     else {
-        player->moveSprite({0.0f, velocity.y});
+        player.moveSprite({0.0f, velocity.y});
     }
-    player->moveSprite({velocity.x, 0.0f});
+    player.moveSprite({velocity.x, 0.0f});
 
     window.clear(sf::Color::White);
 
-    window.draw(player->getSprite());
+    player.draw(window, player.getSprite());
     for (auto& platform : platforms) {
-        window.draw(platform->getSprite());
+        platform.draw(window, platform.getSprite());
     }
     displayScore();
     // displayDebugInfo();
@@ -269,13 +230,42 @@ void Game::play() {
     window.display();
 }
 
+void Game::initPlatformTextures() {
+    platformTextures.emplace_back();
+    platformTextures[0].loadFromFile("assets/platform.png");
+
+    platformTextures.emplace_back();
+    platformTextures[1].loadFromFile("assets/platform_break.png");
+
+    platformTextures.emplace_back();
+    platformTextures[2].loadFromFile("assets/platform_moving.png");
+
+    platformTextures.emplace_back();
+    platformTextures[3].loadFromFile("assets/platform_boost.png");
+}
+
+sf::Texture& Game::pickTexture(PlatformType platformType) {
+    switch (platformType) {
+    case PlatformType::NORMAL:
+        return platformTextures[0];
+    case PlatformType::BREAKABLE:
+        return platformTextures[1];
+    case PlatformType::MOVING:
+        return platformTextures[2];
+    case PlatformType::BOOST:
+        return platformTextures[3];
+    default:
+        return platformTextures[0];
+    }
+}
+
 void Game::displayScore() {
-    score -= player->getYVelocity();
+    score -= player.getYVelocity();
     if (score > maxScore)
         maxScore = score;
 
-    scoreText->setString("Score: " + std::to_string((int)maxScore));
-    window.draw(*scoreText);
+    scoreText.setString("Score: " + std::to_string((int)maxScore));
+    window.draw(scoreText);
 }
 
 void Game::changeScreen(ScreenType screenType) {

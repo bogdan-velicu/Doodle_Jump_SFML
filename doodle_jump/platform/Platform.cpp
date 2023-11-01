@@ -9,6 +9,8 @@ Platform::Platform() {
     updateCount = 0;
     type = PlatformType::NORMAL;
 
+    texture = new sf::Texture();
+
     int x = 0;
     int y = 800;
 
@@ -19,8 +21,10 @@ Platform::~Platform() {
     std::cout << "Platform destructor called\n";
 }
 
-Platform::Platform(const Platform& platform) : texture(platform.texture), sprite(platform.sprite) {
+Platform::Platform(const Platform& platform) {
     std::cout << "Platform copy constructor called\n";
+    texture = platform.texture;
+    sprite = platform.sprite;
     type = platform.type;
     updateCount = platform.updateCount;
 }
@@ -65,24 +69,29 @@ void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
 
     type = platformType;
 
-    switch (platformType) {
-    case PlatformType::NORMAL:
-        texture.loadFromFile("assets/platform.png");
-        break;
-    case PlatformType::BREAKABLE:
-        texture.loadFromFile("assets/platform_break.png");
-        break;
-    case PlatformType::MOVING:
-        texture.loadFromFile("assets/platform_moving.png");
-        break;
-    case PlatformType::BOOST:
-        texture.loadFromFile("assets/platform_boost.png");
-        break;
-    default:
-        break;
-    }
-    sprite.setTexture(texture);
+    // switch (platformType) {
+    // case PlatformType::NORMAL:
+    //     texture.loadFromFile("assets/platform.png");
+    //     break;
+    // case PlatformType::BREAKABLE:
+    //     texture.loadFromFile("assets/platform_break.png");
+    //     break;
+    // case PlatformType::MOVING:
+    //     texture.loadFromFile("assets/platform_moving.png");
+    //     break;
+    // case PlatformType::BOOST:
+    //     texture.loadFromFile("assets/platform_boost.png");
+    //     break;
+    // default:
+    //     break;
+    // }
+    // sprite.setTexture(texture);
     sprite.setPosition((float)x, (float)y);
+}
+
+void Platform::assignTexture(sf::Texture& texture_) {
+    texture = &texture_;
+    sprite.setTexture(*texture);
 }
 
 std::ostream& operator<<(std::ostream& os, const PlatformType& platformType) {
@@ -137,6 +146,6 @@ sf::Sprite Platform::getSprite() const {
     return sprite;
 }
 
-// sf::Texture Platform::getTexture() const {
-//     return texture;
-// }
+void Platform::draw(sf::RenderWindow& window, const sf::Sprite& _sprite) {
+    window.draw(_sprite);
+}

@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include "../game_object/GameObject.h"
+
 enum class PlayerState {
     STANDING,
     JUMPING,
@@ -8,7 +10,7 @@ enum class PlayerState {
     MOVING_RIGHT,
 };
 
-class Player {
+class Player : public GameObject {
 private:
     sf::Texture texture = sf::Texture();
     PlayerState state = PlayerState::STANDING;
@@ -39,4 +41,6 @@ public:
     void jump();
     void moveLeft();
     void moveRight();
+
+    void draw(sf::RenderWindow& window, const sf::Sprite& sprite) override;
 };

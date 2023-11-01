@@ -116,10 +116,6 @@ std::ostream& operator<<(std::ostream& out, const Player& player) {
     return out;
 }
 
-// sf::Vector2f Player::getCoordinates() const {
-//     return sprite->getPosition();
-// }
-
-// void Player::setCoordinates(const sf::Vector2f& coordinates_) {
-//     sprite->setPosition(coordinates_);
-// }
+void Player::draw(sf::RenderWindow& window, const sf::Sprite& _sprite) {
+    window.draw(_sprite);
+}

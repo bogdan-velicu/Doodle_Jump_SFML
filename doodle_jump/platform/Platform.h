@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../game_object/GameObject.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -11,11 +12,11 @@ enum class PlatformType {
 };
 std::ostream& operator<<(std::ostream& os, const PlatformType& platformType);
 
-class Platform {
+class Platform : public GameObject {
 private:
     PlatformType type;
-    sf::Texture texture = sf::Texture();
-    sf::Sprite sprite = sf::Sprite();
+    sf::Texture *texture;
+    sf::Sprite sprite;
     int updateCount;
 public:
     Platform();
@@ -26,7 +27,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Platform& platform);
     PlatformType getType() const;
     sf::Sprite getSprite() const;
-    // sf::Texture getTexture() const;
     void moveSprite(const sf::Vector2f& coordinates_);
     void animateMovement();
+    void assignTexture(sf::Texture& texture_);
+    void draw(sf::RenderWindow& window, const sf::Sprite& sprite) override;
 };
