@@ -38,23 +38,19 @@ void Powerups::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
     
     PowerupsType powerupsType = PowerupsType::JETPACK;
     updateCount = 0;
-    int random = rand() % 300;
+    // int random = rand() % 300;
 
-    // 30% chance of generating a rocket powerup
-    // 30% chance of generating a shield powerup
-    // 30% chance of generating a jetpack powerup
+    // if (random < 100) {
+    //     powerupsType = PowerupsType::ROCKET;
+    // } else if (random < 200) {
+    //     powerupsType = PowerupsType::SHIELD;
+    // } else {
+    //     powerupsType = PowerupsType::JETPACK;
+    // }
 
-    if (random < 100) {
-        powerupsType = PowerupsType::ROCKET;
-    } else if (random < 200) {
-        powerupsType = PowerupsType::SHIELD;
-    } else if (random < 300) {
-        powerupsType = PowerupsType::JETPACK;
-    }
+    float x = lastPlatformCoordinates.x + 20;
 
-    float x = lastPlatformCoordinates.x;
-
-    float y = lastPlatformCoordinates.y - 30;
+    float y = lastPlatformCoordinates.y - 100;
 
     sprite.setPosition(x, y);
     type = powerupsType;
@@ -73,6 +69,11 @@ PowerupsType Powerups::getType() const {
 
 sf::Sprite Powerups::getSprite() const {
     return sprite;
+}
+
+void Powerups::assignTexture(sf::Texture& texture_) {
+    texture = &texture_;
+    sprite.setTexture(*texture);
 }
 
 void Powerups::moveSprite(const sf::Vector2f& coordinates_) {

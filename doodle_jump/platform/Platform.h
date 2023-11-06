@@ -15,8 +15,8 @@ std::ostream& operator<<(std::ostream& os, const PlatformType& platformType);
 class Platform : public GameObject {
 private:
     PlatformType type;
-    sf::Texture *texture;
-    sf::Sprite sprite;
+    sf::Texture *texture = new sf::Texture();
+    sf::Sprite sprite = sf::Sprite();
     int updateCount;
 public:
     Platform();

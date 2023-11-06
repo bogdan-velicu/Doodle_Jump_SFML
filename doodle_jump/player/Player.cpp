@@ -8,35 +8,30 @@ Player::Player() {
     xVelocity = 0;
     yVelocity = 0;
 
-    texture.loadFromFile("assets/player.png");
+    texture.loadFromFile("assets/Doodle-Ninja.png");
 
     sprite.setTexture(texture);
     sprite.setPosition(400, 550);
+
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
+    sprite.scale(-1.0f, 1.0f);
 }
 
 sf::Sprite Player::getSprite() const {
     return sprite;
 }
 
-// sf::Texture Player::getTexture() const {
-//     return texture;
-// }
+void Player::setSpritePosition(const sf::Vector2f& coordinates_) {
+    sprite.setPosition(coordinates_);
+}
 
 void Player::moveSprite(const sf::Vector2f& coordinates_) {
     sprite.move(coordinates_);
 }
 
-// void Player::setXVelocity(float xVelocity_) {
-//     xVelocity = xVelocity_;
-// }
-
 void Player::setYVelocity(float yVelocity_) {
     yVelocity = yVelocity_;
 }
-
-// float Player::getXVelocity() const {
-//     return xVelocity;
-// }
 
 float Player::getYVelocity() const {
     return yVelocity;
@@ -48,15 +43,14 @@ sf::Vector2f Player::getVelocity() const {
 
 void Player::jump() {
     yVelocity = -12.0f;
-    state = PlayerState::JUMPING;
+    // state = PlayerState::JUMPING;
 }
 
 void Player::moveLeft() {
     if (xVelocity > -5.0f) {
         xVelocity -= 1.0f;
-        // Failed attempt at flipping player sprite
-        // if (state == PlayerState::MOVING_RIGHT)
-        //     sprite->scale(-1.0f, 1.0f);
+        if (state == PlayerState::MOVING_RIGHT)
+            sprite.scale(-1.0f, 1.0f);
         state = PlayerState::MOVING_LEFT;
     }
 }
@@ -64,8 +58,8 @@ void Player::moveLeft() {
 void Player::moveRight() {
     if (xVelocity < 5.0f) {
         xVelocity += 1.0f;
-        // if (state == PlayerState::MOVING_LEFT)
-        //     sprite->scale(-1.0f, 1.0f);
+        if (state == PlayerState::MOVING_LEFT)
+            sprite.scale(-1.0f, 1.0f);
         state = PlayerState::MOVING_RIGHT;
     }
 }

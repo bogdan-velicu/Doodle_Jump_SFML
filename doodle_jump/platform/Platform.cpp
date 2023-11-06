@@ -9,8 +9,6 @@ Platform::Platform() {
     updateCount = 0;
     type = PlatformType::NORMAL;
 
-    texture = new sf::Texture();
-
     int x = 0;
     int y = 800;
 
@@ -23,7 +21,7 @@ Platform::~Platform() {
 
 Platform::Platform(const Platform& platform) {
     std::cout << "Platform copy constructor called\n";
-    texture = platform.texture;
+    texture = new sf::Texture();
     sprite = platform.sprite;
     type = platform.type;
     updateCount = platform.updateCount;
@@ -69,23 +67,6 @@ void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
 
     type = platformType;
 
-    // switch (platformType) {
-    // case PlatformType::NORMAL:
-    //     texture.loadFromFile("assets/platform.png");
-    //     break;
-    // case PlatformType::BREAKABLE:
-    //     texture.loadFromFile("assets/platform_break.png");
-    //     break;
-    // case PlatformType::MOVING:
-    //     texture.loadFromFile("assets/platform_moving.png");
-    //     break;
-    // case PlatformType::BOOST:
-    //     texture.loadFromFile("assets/platform_boost.png");
-    //     break;
-    // default:
-    //     break;
-    // }
-    // sprite.setTexture(texture);
     sprite.setPosition((float)x, (float)y);
 }
 
