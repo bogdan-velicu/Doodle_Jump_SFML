@@ -13,7 +13,7 @@ public:
     GameObject& operator=(const GameObject& gameObject);
     virtual void draw(sf::RenderWindow& window);
     virtual void assignTexture(sf::Texture& texture_);
-    virtual sf::Texture& getTexture();
+    // virtual sf::Texture& getTexture();
     virtual void loadTexture(const std::string& path);
     virtual sf::Sprite getSprite() const;
     virtual void setSpritePos(const sf::Vector2f& coordinates);

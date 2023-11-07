@@ -10,11 +10,10 @@ GameObject::~GameObject() {
     std::cout << "GameObject destructor called\n";
 }
 
-GameObject::GameObject(const GameObject& gameObject) {
+GameObject::GameObject(const GameObject& gameObject) : sprite(gameObject.sprite) {
     std::cout << "GameObject copy constructor called\n";
     // texture = new sf::Texture();
     texture = gameObject.texture;
-    sprite = sf::Sprite();
     sprite.setPosition(gameObject.sprite.getPosition());
     sprite.setTexture(*texture);
 }
@@ -38,10 +37,6 @@ void GameObject::assignTexture(sf::Texture& texture_) {
 
 void GameObject::draw(sf::RenderWindow& window) {
     window.draw(sprite);
-}
-
-sf::Texture& GameObject::getTexture() {
-    return *texture;
 }
 
 void GameObject::loadTexture(const std::string& path) {

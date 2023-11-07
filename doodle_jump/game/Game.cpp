@@ -25,9 +25,9 @@ Game::Game() {
 
     gameObject = &player;
 
-    auto player = dynamic_cast<Player*>(gameObject);
-    if (player) {
-        player->setHealth(4);
+    auto player_ = dynamic_cast<Player*>(gameObject);
+    if (player_) {
+        player_->setHealth(4);
     } else {
         std::cout << "gameObject is not a Player\n";
     }
