@@ -19,6 +19,21 @@ public:
         gameObject = gameObject_;
     }
 
+    void assignTexture(sf::Texture& texture) {
+        if (gameObject != nullptr)
+            gameObject->assignTexture(texture);
+    }
+
+    sf::Texture& getTexture() {
+        if (gameObject != nullptr)
+            return gameObject->getTexture();
+    }
+
+    sf::Sprite getSprite() {
+        if (gameObject != nullptr)
+            return gameObject->getSprite();
+    }
+
     void draw(sf::RenderWindow& window, const sf::Sprite& sprite) {
         std::cout << "PowerDrawer draw called\n";
         

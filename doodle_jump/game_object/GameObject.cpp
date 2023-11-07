@@ -10,6 +10,11 @@ GameObject::~GameObject() {
     std::cout << "GameObject destructor called\n";
 }
 
-void GameObject::draw(sf::RenderWindow &window, const sf::Sprite& sprite) {
-    window.draw(sprite);
+void GameObject::assignTexture(sf::Texture& texture_) {
+    texture = texture_;
+    sprite.setTexture(texture);
+}
+
+void GameObject::draw(sf::RenderWindow &window, const sf::Sprite& sprite_) {
+    window.draw(sprite_);
 }

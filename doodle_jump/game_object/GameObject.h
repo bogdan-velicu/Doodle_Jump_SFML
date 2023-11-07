@@ -9,5 +9,15 @@ private:
 public:
     GameObject();
     virtual ~GameObject();
-    virtual void draw(sf::RenderWindow& window, const sf::Sprite& sprite);
+    virtual void assignTexture(sf::Texture& texture_);
+
+    virtual sf::Texture& getTexture() {
+        return texture;
+    }
+
+    virtual sf::Sprite getSprite() {
+        return sprite;
+    }
+
+    virtual void draw(sf::RenderWindow& window, const sf::Sprite& sprite_);
 };
