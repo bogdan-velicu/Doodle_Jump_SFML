@@ -3,6 +3,7 @@
 #include "./../screen/PlayScreen.h"
 #include "./../screen/GameOver.h"
 #include <iostream>
+#include <memory>
 #include <string>
 
 const int SCREEN_WIDTH = 800;
@@ -21,13 +22,20 @@ Game::Game() {
     currentScreen = ScreenType::MAIN_MENU;
     score = 0;
     maxScore = 0;
+
+    gameObject = &player;
+
+    auto player = dynamic_cast<Player*>(gameObject);
+    if (player) {
+        player->setHealth(4);
+    } else {
+        std::cout << "gameObject is not a Player\n";
+    }
     
     initTextures();
 
     platforms = std::vector<Platform>();
     powerups = std::vector<Powerups>();
-    powerDrawer = PowerDrawer();
-    // powerup = nullptr;
 
     lastPlatform = new Platform();
     
@@ -77,7 +85,6 @@ void Game::reset() {
 
     lastPlatform = new Platform();
     powerups.clear();
-    // powerup = nullptr;
 
     for (int i = 0; i < 20; i++) {
         auto platform = Platform();
@@ -136,7 +143,7 @@ void Game::run() {
             Game::play();
             break;
         case ScreenType::GAME_OVER:
-            GameOver::render(window);
+            GameOver::render(window, maxScore);
             break;
         case ScreenType::CLOSE:
             window.close();
@@ -253,7 +260,9 @@ void Game::play() {
         }
     }
     else {
-        player.moveSprite({0.0f, velocity.y});
+        // funcție virtuala apelata prin pointer
+        gameObject->moveSprite({0.0f, velocity.y});
+        // player.moveSprite({0.0f, velocity.y});
     }
     player.moveSprite({velocity.x, 0.0f});
 
@@ -262,12 +271,12 @@ void Game::play() {
     window.draw(backgroundSprite[0]);
     window.draw(backgroundSprite[1]);
     
-    player.draw(window, player.getSprite());
+    player.draw(window);
     for (auto& platform : platforms) {
-        platform.draw(window, platform.getSprite());
+        platform.draw(window);
     }
     for (auto& powerup : powerups) {
-        powerup.draw(window, powerup.getSprite());
+        powerup.draw(window);
     }
     displayScore();
     // displayDebugInfo();

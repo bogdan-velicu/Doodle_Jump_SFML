@@ -12,17 +12,15 @@ Platform::Platform() {
     int x = 0;
     int y = 800;
 
-    sprite.setPosition((float)x, (float)y);
+    setSpritePosition({(float)x, (float)y});
 }
 
 Platform::~Platform() {
     std::cout << "Platform destructor called\n";
 }
 
-Platform::Platform(const Platform& platform) {
+Platform::Platform(const Platform& platform) : GameObject(platform) {
     std::cout << "Platform copy constructor called\n";
-    texture = new sf::Texture();
-    sprite = platform.sprite;
     type = platform.type;
     updateCount = platform.updateCount;
 }
@@ -30,9 +28,8 @@ Platform::Platform(const Platform& platform) {
 Platform& Platform::operator=(const Platform& platform) {
     std::cout << "Platform copy assignment operator called\n";
     if (this != &platform) {
+        GameObject::operator=(platform);
         type = platform.type;
-        texture = platform.texture;
-        sprite = platform.sprite;
         updateCount = platform.updateCount;
     }
     return *this;
@@ -67,12 +64,7 @@ void Platform::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
 
     type = platformType;
 
-    sprite.setPosition((float)x, (float)y);
-}
-
-void Platform::assignTexture(sf::Texture& texture_) {
-    texture = &texture_;
-    sprite.setTexture(*texture);
+    setSpritePosition({(float)x, (float)y});
 }
 
 std::ostream& operator<<(std::ostream& os, const PlatformType& platformType) {
@@ -102,16 +94,12 @@ std::ostream& operator<<(std::ostream& os, const Platform& platform) {
     return os;
 }
 
-void Platform::moveSprite(const sf::Vector2f& coordinates_) {
-    sprite.move(coordinates_);
-}
-
 void Platform::animateMovement() {
     if (updateCount < 100) {
-        sprite.move({ -1.0f, 0.0f });
+        moveSprite({ -1.0f, 0.0f });
     }
     else if (updateCount < 200) {
-        sprite.move({ 1.0f, 0.0f });
+        moveSprite({ 1.0f, 0.0f });
     }
     else {
         updateCount = 0;
@@ -121,12 +109,4 @@ void Platform::animateMovement() {
 
 PlatformType Platform::getType() const {
     return type;
-}
-
-sf::Sprite Platform::getSprite() const {
-    return sprite;
-}
-
-void Platform::draw(sf::RenderWindow& window, const sf::Sprite& _sprite) {
-    window.draw(_sprite);
 }

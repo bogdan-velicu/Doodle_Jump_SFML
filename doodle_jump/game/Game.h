@@ -6,43 +6,7 @@
 #include <vector>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-
-class PowerDrawer {
-private:
-    GameObject* gameObject;
-public:
-    PowerDrawer() {
-        gameObject = nullptr;
-    }
-    
-    void setGameObject(GameObject* gameObject_) {
-        gameObject = gameObject_;
-    }
-
-    void assignTexture(sf::Texture& texture) {
-        if (gameObject != nullptr)
-            gameObject->assignTexture(texture);
-    }
-
-    sf::Texture& getTexture() {
-        if (gameObject != nullptr)
-            return gameObject->getTexture();
-    }
-
-    sf::Sprite getSprite() {
-        if (gameObject != nullptr)
-            return gameObject->getSprite();
-    }
-
-    void draw(sf::RenderWindow& window, const sf::Sprite& sprite) {
-        std::cout << "PowerDrawer draw called\n";
-        
-        if (gameObject != nullptr)
-            gameObject->draw(window, sprite);
-        else 
-            window.draw(sprite);
-    }
-};
+#include <memory>
 
 class Game {
     ScreenType currentScreen;
@@ -61,8 +25,8 @@ class Game {
 
     std::vector<Platform> platforms;
     std::vector<Powerups> powerups;
-    PowerDrawer powerDrawer;
-    // GameObject *powerup;
+    GameObject *gameObject;
+
     Platform *lastPlatform;
 public:
     Game();

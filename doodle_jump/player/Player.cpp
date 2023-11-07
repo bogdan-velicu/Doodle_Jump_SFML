@@ -1,32 +1,19 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player() {
+Player::Player() : GameObject() {
     std::cout << "Player constructor called\n";
     currentHeight = 0;
+    health = 3;
 
     xVelocity = 0;
     yVelocity = 0;
 
-    texture.loadFromFile("assets/Doodle-Ninja.png");
+    loadTexture("assets/Doodle-Ninja.png");
+    setSpritePos({400, 550});
 
-    sprite.setTexture(texture);
-    sprite.setPosition(400, 550);
-
-    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
-    sprite.scale(-1.0f, 1.0f);
-}
-
-sf::Sprite Player::getSprite() const {
-    return sprite;
-}
-
-void Player::setSpritePosition(const sf::Vector2f& coordinates_) {
-    sprite.setPosition(coordinates_);
-}
-
-void Player::moveSprite(const sf::Vector2f& coordinates_) {
-    sprite.move(coordinates_);
+    setSpriteOrigin({getSprite().getLocalBounds().width / 2, getSprite().getLocalBounds().height / 2});
+    setSpriteScale({-1.0f, 1.0f});
 }
 
 void Player::setYVelocity(float yVelocity_) {
@@ -41,6 +28,10 @@ sf::Vector2f Player::getVelocity() const {
     return {xVelocity, yVelocity};
 }
 
+void Player::setHealth(int health_) {
+    health = health_;
+}
+
 void Player::jump() {
     yVelocity = -12.0f;
     // state = PlayerState::JUMPING;
@@ -50,7 +41,7 @@ void Player::moveLeft() {
     if (xVelocity > -5.0f) {
         xVelocity -= 1.0f;
         if (state == PlayerState::MOVING_RIGHT)
-            sprite.scale(-1.0f, 1.0f);
+            setSpriteScale({-1.0f, 1.0f});
         state = PlayerState::MOVING_LEFT;
     }
 }
@@ -59,7 +50,7 @@ void Player::moveRight() {
     if (xVelocity < 5.0f) {
         xVelocity += 1.0f;
         if (state == PlayerState::MOVING_LEFT)
-            sprite.scale(-1.0f, 1.0f);
+            setSpriteScale({-1.0f, 1.0f});
         state = PlayerState::MOVING_RIGHT;
     }
 }
@@ -87,11 +78,11 @@ void Player::handleMovement() {
     }
 
     // Handle moving off screen
-    if (sprite.getPosition().x < 0.0f) {
-        sprite.setPosition(800.0f, sprite.getPosition().y);
+    if (getSprite().getPosition().x < 0.0f) {
+        setSpritePosition({800.0f, getSprite().getPosition().y});
     }
-    else if (sprite.getPosition().x > 800.0f) {
-        sprite.setPosition(0.0f, sprite.getPosition().y);
+    else if (getSprite().getPosition().x > 800.0f) {
+        setSpritePosition({0.0f, getSprite().getPosition().y});
     }
 
     // Handle gravity
@@ -108,8 +99,4 @@ std::ostream& operator<<(std::ostream& out, const Player& player) {
     out << "Player: coordinates = (" << coordinates.x << ", " << coordinates.y << ")" <<
         ", xVelocity = " << player.xVelocity << ", yVelocity = " << player.yVelocity;
     return out;
-}
-
-void Player::draw(sf::RenderWindow& window, const sf::Sprite& _sprite) {
-    window.draw(_sprite);
 }

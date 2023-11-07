@@ -7,7 +7,6 @@ Powerups::Powerups() {
     std::cout << "Powerups constructor called\n";
     updateCount = 0;
     type = PowerupsType::JETPACK;
-    gameObject = nullptr;
 }
 
 Powerups::~Powerups() {
@@ -29,9 +28,21 @@ std::ostream& operator<<(std::ostream& out, const PowerupsType& powerupsType) {
     return out;
 }
 
-// void Powerups::setGameObject(GameObject *gameObject_) {
-//     gameObject = gameObject_;
-// }
+Powerups& Powerups::operator=(const Powerups& powerups) {
+    std::cout << "Powerups copy assignment operator called\n";
+    if (this != &powerups) {
+        GameObject::operator=(powerups);
+        type = powerups.type;
+        updateCount = powerups.updateCount;
+    }
+    return *this;
+}
+
+Powerups::Powerups(const Powerups& powerups) : GameObject(powerups) {
+    std::cout << "Powerups copy constructor called\n";
+    type = powerups.type;
+    updateCount = powerups.updateCount;
+}
 
 void Powerups::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
     std::cout << "Powerups constructor called\n";
@@ -52,7 +63,7 @@ void Powerups::useGenerator(const sf::Vector2f& lastPlatformCoordinates) {
 
     float y = lastPlatformCoordinates.y - 100;
 
-    sprite.setPosition(x, y);
+    setSpritePos({x, y});
     type = powerupsType;
 }
 
@@ -67,19 +78,6 @@ PowerupsType Powerups::getType() const {
     return type;
 }
 
-// sf::Sprite Powerups::getSprite() const {
-//     return sprite;
-// }
-
-// void Powerups::assignTexture(sf::Texture& texture_) {
-//     texture = &texture_;
-//     sprite.setTexture(*texture);
-// }
-
-void Powerups::moveSprite(const sf::Vector2f& coordinates_) {
-    sprite.move(coordinates_);
-}
-
 // void Powerups::animateMovement() {
 //     updateCount++;
 //     if (updateCount == 100) {
@@ -87,13 +85,3 @@ void Powerups::moveSprite(const sf::Vector2f& coordinates_) {
 //     }
 //     sprite.move(0.0f, 1.0f);
 // }
-
-void Powerups::draw(sf::RenderWindow& window, const sf::Sprite& sprite_) {
-    window.draw(sprite_);
-    // if (gameObject != nullptr) {
-    //     gameObject->draw(window, sprite_);
-    // }
-    // else {
-    //     std::cout << "Powerups::draw() gameObject is nullptr\n";
-    // }
-}
