@@ -18,6 +18,8 @@ const int SCREEN_HEIGHT = 600;
 #define POWERUP_SHIELD_TEXTURE "assets/powerup_shield.png"
 #define POWERUP_ROCKET_TEXTURE "assets/powerup_rocket.png"
 
+int Game::difficulty = 0;
+
 Game::Game() {
     std::cout << "Game constructor called\n";
     currentScreen = ScreenType::MAIN_MENU;
