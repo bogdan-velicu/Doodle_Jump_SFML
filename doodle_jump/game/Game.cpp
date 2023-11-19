@@ -159,8 +159,8 @@ void Game::run() {
     }
 }
 
-void Game::setDifficulty(int difficulty) {
-    Game::difficulty = difficulty;
+void Game::setDifficulty(int difficulty_) {
+    Game::difficulty = difficulty_;
 }
 
 void Game::checkCollision() {

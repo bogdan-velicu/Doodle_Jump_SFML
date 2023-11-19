@@ -40,7 +40,7 @@ public:
     void play();
     void reset();
     void initTextures();
-    static void setDifficulty(int difficulty);
+    static void setDifficulty(int difficulty_);
     sf::Texture& pickTexture(PlatformType platformType);
     sf::Texture& pickTexture(PowerupsType powerupsType);
     void displayScore();
