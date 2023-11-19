@@ -15,7 +15,7 @@ int main() {
     XInitThreads();
     #endif
 
-    srand(time(NULL));
+    srand(time(nullptr));
 
     try {
         throw RandomException();
