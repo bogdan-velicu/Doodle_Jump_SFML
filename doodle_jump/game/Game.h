@@ -17,6 +17,7 @@ class Game {
     float maxScore;
     sf::Text scoreText;
     Player player;
+    static int difficulty;
 
     sf::Sprite backgroundSprite[2] = { sf::Sprite(), sf::Sprite() };
     std::vector<sf::Texture> platformTextures = std::vector<sf::Texture>();
@@ -38,8 +39,8 @@ public:
     void changeScreen(ScreenType screenType);
     void play();
     void reset();
-    // void displayDebugInfo();
     void initTextures();
+    static void setDifficulty(int difficulty);
     sf::Texture& pickTexture(PlatformType platformType);
     sf::Texture& pickTexture(PowerupsType powerupsType);
     void displayScore();

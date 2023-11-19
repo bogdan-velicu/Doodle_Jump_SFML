@@ -2,6 +2,7 @@
 #include "./../screen/MainMenu.h"
 #include "./../screen/PlayScreen.h"
 #include "./../screen/GameOver.h"
+#include "./../exceptions/Exceptions.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -99,6 +100,7 @@ void Game::reset() {
 
 void Game::run() {
     std::cout << "Game run called\n";
+    Game::setDifficulty(1);
 
     while (window.isOpen()) {
         sf::Event e = sf::Event();
@@ -153,6 +155,10 @@ void Game::run() {
         }
         
     }
+}
+
+void Game::setDifficulty(int difficulty) {
+    Game::difficulty = difficulty;
 }
 
 void Game::checkCollision() {
@@ -264,6 +270,12 @@ void Game::play() {
         gameObject->moveSprite({0.0f, velocity.y});
         // player.moveSprite({0.0f, velocity.y});
     }
+
+    // Check if player is out of bounds
+    if (player.getSprite().getPosition().y < 0.0f) {
+        throw PlayerOutOfBoundException();
+    }
+
     player.moveSprite({velocity.x, 0.0f});
 
     window.clear(sf::Color::White);

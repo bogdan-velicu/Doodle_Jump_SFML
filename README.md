@@ -2,6 +2,10 @@
 
 #### In acest proiect voi recrea popularul joc mobil Doodle Jump folosind limbajul de programare C++ alaturi de libraria SFML pentru interfata grafica.
 
+## Known Issues
+
+- Peste scor ~30k playerul iese din ecran
+
 ### Tema 0
 
 - [x] Nume proiect (poate fi schimbat ulterior)
@@ -39,11 +43,11 @@
   - [x] smart pointers (recomandat, opțional)
   - [x] `dynamic_cast`/`std::dynamic_pointer_cast` pentru downcast cu sens
 - [x] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
-- [ ] excepții
-  - [ ] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`; minim 2 clase pentru erori specifice
-  - [ ] utilizare cu sens: de exemplu, `throw` în constructor, `try`/`catch` în `main`
-- [ ] funcții și atribute `static`
-- [ ] STL
+- [x] excepții
+  - [x] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`; minim 2 clase pentru erori specifice
+  - [x] utilizare cu sens: de exemplu, `throw` în constructor, `try`/`catch` în `main`
+- [x] funcții și atribute `static`
+- [x] STL
 - [x] cât mai multe `const`
 - [ ] la sfârșit: commit separat cu adăugarea unei noi clase derivate fără a modifica restul codului, pe lângă cele 3 derivate deja adăugate
   - noua derivată nu poate fi una existentă care a fost ștearsă și adăugată din nou
