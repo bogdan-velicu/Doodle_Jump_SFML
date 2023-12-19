@@ -1,9 +1,13 @@
 #include "Exceptions.h"
 
-const char* PlayerOutOfBoundException::what() const noexcept {
-    return "Player is out of bound";
+const char* DoodleJumpException::what() const noexcept {
+    return "DoodleJumpException";
 }
 
-const char* RandomException::what() const noexcept {
-    return "Random exception";
+const char* PlayerOutOfBoundException::what() const noexcept {
+    return "PlayerOutOfBoundException";
+}
+
+const char* InvalidGameStateException::what() const noexcept {
+    return "InvalidGameStateException";
 }

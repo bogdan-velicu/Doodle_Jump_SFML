@@ -107,36 +107,55 @@ void Game::run() {
     while (window.isOpen()) {
         sf::Event e = sf::Event();
         while (window.pollEvent(e)) {
-            ScreenType screenCopy = currentScreen;
-            switch (e.type) {
-            case sf::Event::Closed:
-                window.close();
-                break;
-            case sf::Event::Resized:
-                std::cout << "New width: " << window.getSize().x << '\n'
-                          << "New height: " << window.getSize().y << '\n';
-                break;
-            case sf::Event::KeyPressed:
-                switch (currentScreen) {
-                case ScreenType::MAIN_MENU:
-                    MainMenu::handleInput(e, currentScreen);
+            try {
+                ScreenType screenCopy = currentScreen;
+                switch (e.type) {
+                case sf::Event::Closed:
+                    window.close();
                     break;
-                case ScreenType::GAME_OVER:
-                    GameOver::handleInput(e, currentScreen);
-                    if (currentScreen == ScreenType::PLAY)
-                        reset();
+                case sf::Event::Resized:
+                    std::cout << "New width: " << window.getSize().x << '\n'
+                            << "New height: " << window.getSize().y << '\n';
                     break;
-                case ScreenType::PLAY:
-                    PlayScreen::handleInput(e, currentScreen);
-                    if (screenCopy != currentScreen)
-                        reset();
+                case sf::Event::KeyPressed:
+                    switch (currentScreen) {
+                    case ScreenType::MAIN_MENU:
+                        MainMenu::handleInput(e, currentScreen);
+                        break;
+                    case ScreenType::GAME_OVER:
+                        GameOver::handleInput(e, currentScreen);
+                        if (currentScreen == ScreenType::PLAY)
+                            reset();
+                        break;
+                    case ScreenType::PLAY:
+                        PlayScreen::handleInput(e, currentScreen);
+                        if (screenCopy != currentScreen)
+                            reset();
+                        break;
+                    default:
+                        throw InvalidGameStateException();
+                        break;
+                    }
                     break;
                 default:
                     break;
                 }
-                break;
-            default:
-                break;
+            }
+            catch (DoodleJumpException& e) {
+                std::cout << e.what() << '\n';
+
+                auto* p = dynamic_cast<PlayerOutOfBoundException*>(&e);
+                auto* p2 = dynamic_cast<InvalidGameStateException*>(&e);
+                
+                if (p != nullptr) {
+                    std::cout << "Player out of bounds: " << p->what() << '\n';
+                    changeScreen(ScreenType::GAME_OVER);
+                }
+
+                if (p2 != nullptr) {
+                    std::cout << "Invalid game state: " << p2->what() << '\n';
+                    changeScreen(ScreenType::CLOSE);
+                }
             }
         }
         switch (currentScreen) {
