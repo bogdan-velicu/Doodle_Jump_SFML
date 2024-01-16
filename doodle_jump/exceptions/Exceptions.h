@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <exception>
 
@@ -12,6 +14,11 @@ public:
 };
 
 class InvalidGameStateException : public DoodleJumpException {
+public:
+    [[nodiscard]] const char* what() const noexcept override;
+};
+
+class DoodleVectorInvalidIndexException : public DoodleJumpException {
 public:
     [[nodiscard]] const char* what() const noexcept override;
 };

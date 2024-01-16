@@ -11,3 +11,7 @@ const char* PlayerOutOfBoundException::what() const noexcept {
 const char* InvalidGameStateException::what() const noexcept {
     return "InvalidGameStateException";
 }
+
+const char* DoodleVectorInvalidIndexException::what() const noexcept {
+    return "DoodleVectorInvalidIndexException";
+}
