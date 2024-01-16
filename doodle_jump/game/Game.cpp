@@ -141,21 +141,19 @@ void Game::run() {
                     break;
                 }
             }
-            catch (DoodleJumpException& e) {
-                std::cout << e.what() << '\n';
-
-                auto* p = dynamic_cast<PlayerOutOfBoundException*>(&e);
-                auto* p2 = dynamic_cast<InvalidGameStateException*>(&e);
-                
-                if (p != nullptr) {
-                    std::cout << "Player out of bounds: " << p->what() << '\n';
-                    changeScreen(ScreenType::GAME_OVER);
-                }
-
-                if (p2 != nullptr) {
-                    std::cout << "Invalid game state: " << p2->what() << '\n';
-                    changeScreen(ScreenType::CLOSE);
-                }
+            catch (PlayerOutOfBoundException& outOfBound) {
+                std::cout << outOfBound.what() << '\n';
+                changeScreen(ScreenType::GAME_OVER);
+            }
+            catch (InvalidGameStateException& invalidState) {
+                std::cout << invalidState.what() << '\n';
+                changeScreen(ScreenType::CLOSE);
+            }
+            catch (DoodleVectorInvalidIndexException& invalidIndex) {
+                std::cout << invalidIndex.what() << '\n';
+            }
+            catch (DoodleJumpException& except) {
+                std::cout << except.what() << '\n';
             }
         }
         switch (currentScreen) {
